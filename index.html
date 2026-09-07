@@ -1095,7 +1095,7 @@ function scheduleSync(){
 async function syncPush(){
   if(!SYNC_ON) return;
   try{
-    const r=await fetch(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({leads:LEADS,updatedAt:Date.now()})});
+    const r=await fetchT(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({leads:LEADS,updatedAt:Date.now()})},8000);
     setSyncBadge(r.ok?'salvo na nuvem ✓':'erro ao salvar', r.ok?'ok':'err');
   }catch(e){ setSyncBadge('sem conexão','err'); }
 }

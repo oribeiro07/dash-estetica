@@ -1048,6 +1048,54 @@ async function seedJfNovos(){
   localStorage.setItem('seed_jfnovos_v1','1');
 }
 
+/* ---------- Sincronização em nuvem (Cloudflare KV) — salva/carrega automático entre PCs ---------- */
+const SYNC_URL='https://atlas-dashboard-2q3.pages.dev/api/estetica';
+const SYNC_KEY='2b2202ce5ec3f19b1844dc741ba89738b291';
+let SYNC_ON=false, syncing=false, syncTimer=null;
+function setSyncBadge(txt,cls){
+  let b=document.getElementById('syncBadge');
+  if(!b){ b=document.createElement('div'); b.id='syncBadge';
+    b.style.cssText='position:fixed;right:12px;bottom:12px;z-index:9999;font:12px system-ui;padding:6px 10px;border-radius:999px;color:#fff;opacity:.9;box-shadow:0 2px 8px rgba(0,0,0,.25)';
+    document.body.appendChild(b); }
+  b.textContent='☁ '+txt;
+  b.style.background = cls==='err' ? '#b00020' : (cls==='ok' ? '#0a7d33' : '#555');
+}
+async function syncPull(){
+  try{
+    const resp=await fetch(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{cache:'no-store'});
+    if(!resp.ok){ SYNC_ON=false; setSyncBadge('nuvem indisponível (local)','err'); return false; }
+    const data=await resp.json();
+    SYNC_ON=true;
+    if(data && Array.isArray(data.leads) && data.leads.length){
+      syncing=true;
+      const byId=new Map(LEADS.map(l=>[l.id,l]));
+      for(const rl of data.leads){
+        const ex=byId.get(rl.id);
+        if(ex){ await putLead(Object.assign(ex,rl)); }
+        else { await putLead(rl); }
+      }
+      LEADS=await loadAll();
+      syncing=false;
+    }
+    setSyncBadge('sincronizado ✓','ok');
+    scheduleSync(); // devolve o estado mesclado (ou o embutido inicial) pra nuvem
+    return true;
+  }catch(e){ SYNC_ON=false; setSyncBadge('offline (local)','err'); return false; }
+}
+function scheduleSync(){
+  if(!SYNC_ON||syncing) return;
+  clearTimeout(syncTimer);
+  setSyncBadge('salvando…');
+  syncTimer=setTimeout(syncPush, 1500);
+}
+async function syncPush(){
+  if(!SYNC_ON) return;
+  try{
+    const r=await fetch(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({leads:LEADS,updatedAt:Date.now()})});
+    setSyncBadge(r.ok?'salvo na nuvem ✓':'erro ao salvar', r.ok?'ok':'err');
+  }catch(e){ setSyncBadge('sem conexão','err'); }
+}
+
 /* ---------- Preenchimento automático (só completa campos vazios; nunca mexe em Kanban/status) ---------- */
 const DATA_FILL_V='2026-09-07-jf1';
 async function fillFromSeeds(){

@@ -395,8 +395,8 @@ function openDB(){return new Promise((res,rej)=>{
 });}
 function tx(mode){return db.transaction(STORE,mode).objectStore(STORE);}
 function loadAll(){return new Promise(res=>{const out=[];tx('readonly').openCursor().onsuccess=e=>{const c=e.target.result;if(c){out.push(c.value);c.continue();}else res(out);};});}
-function putLead(l){return new Promise(res=>{tx('readwrite').put(l).onsuccess=()=>res();});}
-function delLead(id){return new Promise(res=>{tx('readwrite').delete(id).onsuccess=()=>res();});}
+function putLead(l){return new Promise(res=>{tx('readwrite').put(l).onsuccess=()=>{res();try{if(typeof scheduleSync==='function')scheduleSync();}catch(e){}};});}
+function delLead(id){return new Promise(res=>{tx('readwrite').delete(id).onsuccess=()=>{res();try{if(typeof scheduleSync==='function')scheduleSync();}catch(e){}};});}
 function clearStore(){return new Promise(res=>{tx('readwrite').clear().onsuccess=()=>res();});}
 function ctx(mode){return db.transaction(CAPS,mode).objectStore(CAPS);}
 function loadAllCap(){return new Promise(res=>{const out=[];ctx('readonly').openCursor().onsuccess=e=>{const c=e.target.result;if(c){out.push(c.value);c.continue();}else res(out);};});}

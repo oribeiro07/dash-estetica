@@ -1,0 +1,1077 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospecção Estética · Brasil</title>
+<style>
+  :root{
+    --bg:#0b0f17; --panel:#131a26; --panel2:#0f1622; --border:#22304a;
+    --txt:#e7edf7; --muted:#8ea0bd; --brand:#7c6cff; --brand2:#00d3a7;
+    --amber:#ffb020; --red:#ff5470; --green:#22c55e; --blue:#38bdf8;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 80% -10%, #1a2338 0%, transparent 55%),var(--bg);
+    color:var(--txt); -webkit-font-smoothing:antialiased;
+  }
+  .app{display:flex;min-height:100vh}
+  /* Sidebar */
+  .side{width:230px;flex-shrink:0;background:linear-gradient(180deg,#0f1521,#0b0f17);border-right:1px solid var(--border);padding:22px 16px;position:sticky;top:0;height:100vh}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:.3px;margin-bottom:6px}
+  .logo .dot{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;font-size:15px}
+  .logo small{display:block;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:.5px}
+  .nav{margin-top:26px;display:flex;flex-direction:column;gap:4px}
+  .nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:transparent;color:var(--muted);border:0;padding:11px 12px;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;transition:.15s}
+  .nav button .ic{width:18px;text-align:center}
+  .nav button:hover{background:#182236;color:var(--txt)}
+  .nav button.active{background:linear-gradient(135deg,rgba(124,108,255,.22),rgba(0,211,167,.12));color:#fff;box-shadow:inset 0 0 0 1px var(--border)}
+  .side .foot{position:absolute;bottom:18px;left:16px;right:16px;font-size:11px;color:var(--muted);line-height:1.5}
+  /* Main */
+  .main{flex:1;min-width:0;padding:26px 30px 60px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+  h1{font-size:22px;margin:0;font-weight:800}
+  .sub{color:var(--muted);font-size:13px;margin-top:3px}
+  .btn{border:0;border-radius:10px;padding:10px 15px;font-weight:700;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.15s}
+  .btn.primary{background:linear-gradient(135deg,var(--brand),#6a5bff);color:#fff;box-shadow:0 6px 16px rgba(124,108,255,.35)}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ghost{background:#182236;color:var(--txt);border:1px solid var(--border)}
+  .btn.ghost:hover{background:#1e2b42}
+  .btn.sm{padding:7px 11px;font-size:12.5px}
+  .row{display:flex;gap:14px;flex-wrap:wrap}
+  /* Cards / KPIs */
+  .grid-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+  .kpi{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;position:relative;overflow:hidden}
+  .kpi .lbl{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.3px}
+  .kpi .val{font-size:30px;font-weight:800;margin-top:6px;line-height:1}
+  .kpi .hint{font-size:11.5px;color:var(--muted);margin-top:8px}
+  .kpi .spark{position:absolute;right:14px;top:14px;font-size:20px;opacity:.5}
+  .panel{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px}
+  .panel h2{font-size:15px;margin:0 0 4px;font-weight:700}
+  .panel .desc{color:var(--muted);font-size:12.5px;margin-bottom:16px}
+  /* Funnel */
+  .funnel{display:flex;flex-direction:column;gap:10px}
+  .fstage{display:grid;grid-template-columns:150px 1fr 70px;align-items:center;gap:14px}
+  .fstage .name{font-size:13.5px;font-weight:600}
+  .fstage .bar{height:34px;border-radius:8px;background:#1a2437;position:relative;overflow:hidden}
+  .fstage .fill{height:100%;border-radius:8px;transition:width .6s cubic-bezier(.2,.8,.2,1);min-width:2px}
+  .fstage .num{font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+  .fstage .rate{font-size:11px;color:var(--muted);position:absolute;right:10px;top:50%;transform:translateY(-50%)}
+  /* Table */
+  .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  input,select,textarea{background:#0e1520;border:1px solid var(--border);color:var(--txt);border-radius:9px;padding:9px 11px;font-size:13.5px;font-family:inherit;outline:none}
+  input:focus,select:focus,textarea:focus{border-color:var(--brand)}
+  input::placeholder{color:#5f7089}
+  .search{flex:1;min-width:200px}
+  .tablewrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius)}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:820px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+  th{background:#0e1520;color:var(--muted);font-weight:700;font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;position:sticky;top:0}
+  tr:hover td{background:#0f1826}
+  td.wrap{white-space:normal;max-width:220px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:700}
+  .st-novo{background:#1e293b;color:#94a3b8}
+  .st-abordado{background:rgba(56,189,248,.15);color:var(--blue)}
+  .st-respondeu{background:rgba(255,176,32,.15);color:var(--amber)}
+  .st-reuniao{background:rgba(124,108,255,.2);color:#a99bff}
+  .st-fechado{background:rgba(34,197,94,.18);color:var(--green)}
+  .st-perdido{background:rgba(255,84,112,.15);color:var(--red)}
+  .iglink{color:var(--brand2);text-decoration:none;font-weight:600}
+  .iglink:hover{text-decoration:underline}
+  .muted{color:var(--muted)}
+  .actbtn{background:#182236;border:1px solid var(--border);color:var(--txt);border-radius:7px;padding:5px 9px;font-size:12px;cursor:pointer}
+  .actbtn:hover{background:#243350}
+  .empty{padding:40px;text-align:center;color:var(--muted)}
+  /* Modal */
+  .overlay{position:fixed;inset:0;background:rgba(4,7,12,.66);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:50;overflow-y:auto}
+  .overlay.show{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;width:100%;max-width:640px;box-shadow:var(--shadow)}
+  .modal .mh{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .modal .mh h3{margin:0;font-size:16px}
+  .modal .mb{padding:22px}
+  .x{background:transparent;border:0;color:var(--muted);font-size:22px;cursor:pointer;line-height:1}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px;letter-spacing:.3px}
+  .field input,.field select,.field textarea{width:100%}
+  .field textarea{resize:vertical;min-height:60px}
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .mf{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+  .hintbox{background:#0e1520;border:1px dashed var(--border);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+  .tag{display:inline-block;background:#1a2437;border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:11px;color:var(--muted);margin:2px 3px 2px 0;cursor:pointer}
+  .tag:hover{border-color:var(--brand);color:var(--txt)}
+  /* week bars */
+  .weekchart{display:flex;align-items:flex-end;gap:8px;height:150px;padding-top:10px}
+  .weekchart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+  .weekchart .cbar{width:70%;max-width:34px;background:linear-gradient(180deg,var(--brand),#5a4bd8);border-radius:6px 6px 0 0;min-height:3px;transition:height .5s;position:relative}
+  .weekchart .cbar span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--txt)}
+  .weekchart .clbl{font-size:10.5px;color:var(--muted);font-weight:600}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:#182236;border:1px solid var(--border);color:var(--txt);padding:11px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:var(--shadow);opacity:0;transition:.25s;z-index:100;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .filterchips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{background:#182236;border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer}
+  .chip.active{background:linear-gradient(135deg,var(--brand),#6a5bff);color:#fff;border-color:transparent}
+  /* captação */
+  .capstart{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .capstart input{flex:0 0 auto}
+  .capstart #capCidade{flex:1;min-width:180px}
+  .capcard{background:#0e1520;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+  .capcard .caphead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .capcard .capname{font-weight:800;font-size:15px}
+  .capcard .capname small{color:var(--muted);font-weight:600;font-size:12px;margin-left:6px}
+  .capcard .capnums{font-size:12.5px;color:var(--muted);font-weight:600}
+  .capcard .capnums b{color:var(--brand2);font-variant-numeric:tabular-nums}
+  .capbar{height:12px;border-radius:8px;background:#1a2437;overflow:hidden}
+  .capfill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--brand2),#12b58f);transition:width .6s cubic-bezier(.2,.8,.2,1);min-width:3px}
+  .capcard .capfoot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;flex-wrap:wrap}
+  .capacts{display:flex;gap:6px;flex-wrap:wrap}
+  .capgrupo{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 6px;padding:8px 12px;background:#141d2c;border:1px solid var(--border);border-left:3px solid var(--brand);border-radius:9px}
+  .capgrupo .gname{font-weight:800;font-size:13.5px}
+  .capgrupo .gnums{font-size:12px;color:var(--muted);font-weight:600}
+  .capgrupo .gnums b{color:var(--brand2)}
+  .capcard.reg{margin-left:16px;border-left:2px solid #2a3b57}
+  .btn-ini{background:linear-gradient(135deg,var(--brand2),#12b58f);color:#04140f;border:0;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer}
+  .btn-ini:hover{filter:brightness(1.08)}
+  /* kanban */
+  .kbboard{display:flex;gap:14px;overflow-x:auto;padding:4px 4px 16px;align-items:flex-start}
+  .kbcol{flex:0 0 260px;background:#0e1520;border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;max-height:calc(100vh - 190px)}
+  .kbcol.drop{border-color:var(--brand2);box-shadow:0 0 0 2px rgba(45,212,191,.25)}
+  .kbcol .kbhead{padding:11px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;position:sticky;top:0;background:#0e1520;border-radius:12px 12px 0 0;z-index:1}
+  .kbcol .kbhead .t{font-size:12.5px;font-weight:800;letter-spacing:.3px}
+  .kbcol .kbhead .c{font-size:11px;font-weight:800;color:var(--muted);background:#182236;border:1px solid var(--border);border-radius:999px;padding:1px 8px;min-width:22px;text-align:center}
+  .kbcol .kbbody{padding:10px;display:flex;flex-direction:column;gap:8px;overflow-y:auto}
+  .kbcard{background:#151f2f;border:1px solid var(--border);border-left:3px solid var(--brand);border-radius:9px;padding:9px 10px;cursor:grab;transition:.12s}
+  .kbcard:hover{border-color:var(--brand2);transform:translateY(-1px)}
+  .kbcard.dragging{opacity:.5}
+  .kbcard .n{font-size:12.7px;font-weight:700;line-height:1.25;margin-bottom:5px}
+  .kbcard .meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+  .kbcard .mini{font-size:10.5px;color:var(--muted);background:#0e1520;border:1px solid var(--border);border-radius:5px;padding:1px 6px}
+  .kbcard .mini.ig{color:var(--brand2)}
+  .kbcard .mini.seg{color:var(--amber)}
+  .kbempty{font-size:11px;color:#43506a;text-align:center;padding:14px 6px;border:1px dashed var(--border);border-radius:8px}
+  .kbtools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  @media(max-width:820px){
+    .side{position:fixed;left:-260px;z-index:60;transition:.2s}
+    .side.open{left:0}
+    .main{padding:18px}
+    .fstage{grid-template-columns:100px 1fr 54px}
+    .menutoggle{display:inline-flex!important}
+  }
+  .menutoggle{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="logo">
+      <span class="dot">✦</span>
+      <div>Prospect<span style="color:var(--brand2)">Estética</span>
+      <small>PROSPECÇÃO · BRASIL</small></div>
+    </div>
+    <nav class="nav" id="nav">
+      <button data-view="dashboard" class="active"><span class="ic">📊</span> Dashboard</button>
+      <button data-view="leads"><span class="ic">📋</span> Leads</button>
+      <button data-view="kanban"><span class="ic">🗂️</span> Kanban</button>
+      <button data-view="coleta"><span class="ic">🎯</span> Captação</button>
+      <button data-view="dados"><span class="ic">💾</span> Backup / Dados</button>
+    </nav>
+    <div class="foot">
+      Banco de dados salvo neste navegador.<br>Faça backup em <b>Dados</b> de vez em quando.
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="btn ghost sm menutoggle" onclick="document.getElementById('side').classList.toggle('open')">☰</button>
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <div class="sub" id="pageSub">Visão geral da prospecção</div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn ghost" onclick="openImport()">⬆ Importar</button>
+        <button class="btn primary" onclick="openLead()">＋ Novo lead</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard">
+      <div class="grid-kpi" id="kpis"></div>
+      <div class="row" style="align-items:stretch">
+        <div class="panel" style="flex:1;min-width:320px">
+          <h2>Funil de conversão</h2>
+          <div class="desc">Abordados → Responderam → Reunião → Fechamento</div>
+          <div class="funnel" id="funnel"></div>
+        </div>
+        <div class="panel" style="flex:1;min-width:320px">
+          <h2>Abordados nos últimos 7 dias</h2>
+          <div class="desc">Contagem por dia de abordagem</div>
+          <div class="weekchart" id="weekchart"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Atividade recente</h2>
+        <div class="desc">Últimos leads adicionados ou atualizados</div>
+        <div class="tablewrap">
+          <table id="recentTable"><thead><tr>
+            <th>Nome</th><th>Localização</th><th>Instagram</th><th>Status</th><th>Atualizado</th>
+          </tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADS -->
+    <section id="view-leads" style="display:none">
+      <div class="tools">
+        <input class="search" id="search" placeholder="🔍 Buscar por nome, cidade, sócio, email…" oninput="renderLeads()">
+        <select id="fEstado" onchange="renderLeads()"><option value="">Todos estados</option></select>
+        <div class="filterchips" id="statusChips"></div>
+      </div>
+      <div class="tablewrap">
+        <table id="leadsTable"><thead><tr>
+          <th>Nome</th><th>Localização</th><th>Sócios/Donos</th><th>Email</th><th>Instagram</th><th>Seguidores</th><th>Status</th><th></th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <!-- KANBAN -->
+    <section id="view-kanban" style="display:none">
+      <div class="kbtools">
+        <input id="kbSearch" placeholder="Filtrar por nome, cidade ou @…" style="flex:1;min-width:200px;padding:9px 12px;background:#0e1520;border:1px solid var(--border);border-radius:9px;color:var(--txt)" oninput="renderKanban()">
+        <span class="mini muted" style="font-size:12px;color:var(--muted)">Arraste os cards entre as colunas para guiar sua prospecção diária. Clique num card para editar.</span>
+      </div>
+      <div class="kbboard" id="kanbanBoard"></div>
+    </section>
+
+    <!-- CAPTAÇÃO -->
+    <section id="view-coleta" style="display:none">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <h2 style="margin:0">1. Iniciar captação de uma cidade</h2>
+          <span id="motorBadge" style="font-size:12.5px;font-weight:700;background:#0e1520;border:1px solid var(--border);padding:6px 11px;border-radius:999px">⚪ verificando motor…</span>
+        </div>
+        <div class="desc" style="margin-top:6px">Com o <b>Motor Local</b> ligado, o botão “▶ Iniciar raspagem” já coleta e salva sozinho. Sem o motor, ele copia o pedido pra você colar no Claude.</div>
+        <div class="capstart">
+          <input id="capCidade" placeholder="Cidade (ex.: Campinas)">
+          <input id="capEstado" placeholder="UF" maxlength="2" style="width:70px;text-transform:uppercase">
+          <input id="capMeta" type="number" min="0" placeholder="Meta (opcional)" style="width:130px">
+          <button class="btn ghost" onclick="registrarCaptacao()">＋ Registrar</button>
+          <button class="btn primary" onclick="copiarPedido()">📋 Copiar pedido p/ Claude</button>
+        </div>
+        <div class="hintbox" style="margin-top:14px;border-color:rgba(56,189,248,.35)">
+          ℹ️ <b>Como a coleta acontece:</b> o site é a sua central (registro, contador e dados). A varredura do Google Maps + Instagram é executada pelo <b>Claude</b> pelo seu Chrome — um site sozinho não consegue por bloqueio do Google/Instagram. O botão acima já monta o pedido pronto pra você colar.
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>2. Progresso por cidade</h2>
+        <div class="desc">Contador ao vivo <b style="color:var(--brand2)">captados X / faltam captar Y</b> — atualiza sozinho conforme os dados entram.</div>
+        <div id="capList"></div>
+      </div>
+
+      <div class="panel">
+        <h2>3. Trazer os dados coletados</h2>
+        <div class="desc">Quando o Claude terminar a cidade, cole aqui o resultado (JSON ou CSV) ou selecione o arquivo — os leads entram na base e o progresso atualiza automaticamente.</div>
+        <div class="row" style="margin-bottom:12px">
+          <input type="file" id="capFile" accept=".json,.csv,.txt" onchange="readFileCap(event)">
+        </div>
+        <textarea id="capIngest" style="width:100%;min-height:120px" placeholder="Cole aqui o JSON/CSV entregue pelo Claude…"></textarea>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" onclick="ingestCaptacao()">⬇ Ingerir dados</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DADOS -->
+    <section id="view-dados" style="display:none">
+      <div class="panel">
+        <h2>Backup e restauração</h2>
+        <div class="desc">Seu banco fica só neste navegador. Exporte de vez em quando para não perder nada.</div>
+        <div class="row">
+          <button class="btn primary" onclick="exportJSON()">⬇ Exportar tudo (.json)</button>
+          <button class="btn ghost" onclick="exportCSV()">⬇ Exportar planilha (.csv)</button>
+          <button class="btn ghost" onclick="openImport()">⬆ Importar (.json / .csv)</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Zona de risco</h2>
+        <div class="desc">Ações irreversíveis.</div>
+        <button class="btn ghost" style="color:var(--red);border-color:rgba(255,84,112,.4)" onclick="wipeAll()">🗑 Apagar todos os leads</button>
+      </div>
+      <div class="panel">
+        <h2>Modelo de importação (CSV)</h2>
+        <div class="desc">Cabeçalhos aceitos. Use ";" ou "," como separador.</div>
+        <code style="display:block;background:#0e1520;padding:12px;border-radius:8px;font-size:12px;color:var(--brand2);overflow-x:auto">nome;localizacao;cidade;estado;email;socios;instagram;seguidores;telefone;site;status;notas</code>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Lead modal -->
+<div class="overlay" id="leadOverlay">
+  <div class="modal">
+    <div class="mh"><h3 id="modalTitle">Novo lead</h3><button class="x" onclick="closeLead()">×</button></div>
+    <div class="mb">
+      <input type="hidden" id="f_id">
+      <div class="field"><label>Nome da empresa / profissional *</label><input id="f_nome" placeholder="Ex.: Clínica Bella Estética"></div>
+      <div class="f2">
+        <div class="field"><label>Cidade</label><input id="f_cidade" placeholder="Ex.: São Paulo"></div>
+        <div class="field"><label>Estado (UF)</label><input id="f_estado" placeholder="Ex.: SP" maxlength="2" style="text-transform:uppercase"></div>
+      </div>
+      <div class="field"><label>Localização / Endereço</label><input id="f_localizacao" placeholder="Rua, bairro…"></div>
+      <div class="field"><label>Sócios / Donos</label><input id="f_socios" placeholder="Nomes dos sócios (via CNPJ)"></div>
+      <div class="f2">
+        <div class="field"><label>Email</label><input id="f_email" placeholder="contato@..."></div>
+        <div class="field"><label>Telefone</label><input id="f_telefone" placeholder="(11) 9...."></div>
+      </div>
+      <div class="f2">
+        <div class="field"><label>Link do Instagram</label><input id="f_instagram" placeholder="https://instagram.com/..."></div>
+        <div class="field"><label>Nº de seguidores</label><input id="f_seguidores" placeholder='número ou "não encontrado"'></div>
+      </div>
+      <div class="field"><label>Site</label><input id="f_site" placeholder="https://..."></div>
+      <div class="f2">
+        <div class="field"><label>Status no funil</label>
+          <select id="f_status">
+            <option value="novo">Novo</option>
+            <option value="abordado">Abordado</option>
+            <option value="respondeu">Respondeu</option>
+            <option value="reuniao">Reunião</option>
+            <option value="fechado">Fechado</option>
+            <option value="perdido">Perdido</option>
+          </select>
+        </div>
+        <div class="field"><label>Data da abordagem</label><input type="date" id="f_dataAbordagem"></div>
+      </div>
+      <div class="field"><label>Notas</label><textarea id="f_notas" placeholder="Observações, histórico de contato…"></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn ghost" id="delBtn" style="margin-right:auto;display:none;color:var(--red)" onclick="deleteLead()">Excluir</button>
+      <button class="btn ghost" onclick="closeLead()">Cancelar</button>
+      <button class="btn primary" onclick="saveLead()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import modal -->
+<div class="overlay" id="importOverlay">
+  <div class="modal">
+    <div class="mh"><h3>Importar leads</h3><button class="x" onclick="closeImport()">×</button></div>
+    <div class="mb">
+      <div class="hintbox">Cole um JSON (exportado aqui) ou um CSV com os cabeçalhos do modelo. Leads são adicionados aos existentes (não apaga nada).</div>
+      <div class="row" style="margin-bottom:14px">
+        <input type="file" id="fileInput" accept=".json,.csv,.txt" onchange="readFile(event)">
+      </div>
+      <div class="field"><label>Ou cole aqui</label><textarea id="importText" style="min-height:160px;width:100%" placeholder="[ {...} ]  ou  nome;localizacao;..."></textarea></div>
+      <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;color:var(--amber);cursor:pointer">
+        <input type="checkbox" id="importReplace" style="width:16px;height:16px">
+        <span>🔄 <b>Substituir tudo</b> — usa só o que está no arquivo (apaga o resto). Marque para <b>limpar ruído</b>.</span>
+      </label>
+    </div>
+    <div class="mf">
+      <button class="btn ghost" onclick="closeImport()">Cancelar</button>
+      <button class="btn primary" onclick="doImport()">Importar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- IndexedDB ---------- */
+const DB_NAME='prospeccao_estetica', STORE='leads', CAPS='captacoes';
+let db, LEADS=[], CAPTACOES=[];
+function openDB(){return new Promise((res,rej)=>{
+  const r=indexedDB.open(DB_NAME,2);
+  r.onupgradeneeded=e=>{const d=e.target.result;
+    if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:'id'});
+    if(!d.objectStoreNames.contains(CAPS))d.createObjectStore(CAPS,{keyPath:'key'});
+  };
+  r.onsuccess=e=>{db=e.target.result;res();};
+  r.onerror=e=>rej(e);
+});}
+function tx(mode){return db.transaction(STORE,mode).objectStore(STORE);}
+function loadAll(){return new Promise(res=>{const out=[];tx('readonly').openCursor().onsuccess=e=>{const c=e.target.result;if(c){out.push(c.value);c.continue();}else res(out);};});}
+function putLead(l){return new Promise(res=>{tx('readwrite').put(l).onsuccess=()=>res();});}
+function delLead(id){return new Promise(res=>{tx('readwrite').delete(id).onsuccess=()=>res();});}
+function clearStore(){return new Promise(res=>{tx('readwrite').clear().onsuccess=()=>res();});}
+function ctx(mode){return db.transaction(CAPS,mode).objectStore(CAPS);}
+function loadAllCap(){return new Promise(res=>{const out=[];ctx('readonly').openCursor().onsuccess=e=>{const c=e.target.result;if(c){out.push(c.value);c.continue();}else res(out);};});}
+function putCap(c){return new Promise(res=>{ctx('readwrite').put(c).onsuccess=()=>res();});}
+function delCap(key){return new Promise(res=>{ctx('readwrite').delete(key).onsuccess=()=>res();});}
+const normCity=s=>(s||'').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+
+/* ---------- Helpers ---------- */
+const $=s=>document.querySelector(s);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const STATUS=[['novo','Novo'],['abordado','Abordado'],['respondeu','Respondeu'],['reuniao','Reunião'],['fechado','Fechado'],['perdido','Perdido']];
+const stLabel=k=>(STATUS.find(s=>s[0]===k)||['novo','Novo'])[1];
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function parseLocal(s){if(!s)return null;const m=String(s).match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);return new Date(s);}
+function fmtDate(iso){if(!iso)return '—';const d=new Date(iso);return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});}
+function igHandle(url){if(!url)return '';const m=String(url).match(/instagram\.com\/([^\/\?]+)/i);return m?'@'+m[1]:url;}
+
+/* ---------- Navigation ---------- */
+const TITLES={dashboard:['Dashboard','Visão geral da prospecção'],leads:['Leads','Todos os leads coletados'],kanban:['Kanban','Guia de prospecção diária'],coleta:['Captação','Central de captação por cidade'],dados:['Backup / Dados','Exportar e importar']};
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  const v=b.dataset.view;
+  ['dashboard','leads','kanban','coleta','dados'].forEach(x=>$('#view-'+x).style.display=x===v?'block':'none');
+  $('#pageTitle').textContent=TITLES[v][0];$('#pageSub').textContent=TITLES[v][1];
+  document.getElementById('side').classList.remove('open');
+  if(v==='dashboard')renderDashboard();if(v==='leads')renderLeads();if(v==='kanban')renderKanban();if(v==='coleta'){renderCaptacao();checkMotor();}
+});
+
+/* ---------- Dashboard ---------- */
+function startOfWeek(d){const x=new Date(d);const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);x.setHours(0,0,0,0);return x;}
+function renderDashboard(){
+  const now=new Date(), t0=new Date(now);t0.setHours(0,0,0,0);
+  const wk=startOfWeek(now), mo=new Date(now.getFullYear(),now.getMonth(),1);
+  const approached=LEADS.filter(l=>l.dataAbordagem);
+  const cnt=(from)=>approached.filter(l=>parseLocal(l.dataAbordagem)>=from).length;
+  const total=LEADS.length;
+  const byStatus=k=>LEADS.filter(l=>l.status===k).length;
+  const fechados=byStatus('fechado');
+  const abordadosTotal=LEADS.filter(l=>['abordado','respondeu','reuniao','fechado'].includes(l.status)).length;
+  const conv=abordadosTotal?Math.round(fechados/abordadosTotal*100):0;
+
+  const kpis=[
+    {lbl:'Total de leads',val:total,hint:'na base',ic:'📇'},
+    {lbl:'Abordados hoje',val:cnt(t0),hint:'desde 00:00',ic:'📅'},
+    {lbl:'Abordados na semana',val:cnt(wk),hint:'seg → hoje',ic:'🗓️'},
+    {lbl:'Abordados no mês',val:cnt(mo),hint:now.toLocaleDateString('pt-BR',{month:'long'}),ic:'📈'},
+    {lbl:'Fechamentos',val:fechados,hint:conv+'% de conversão',ic:'✅'},
+  ];
+  $('#kpis').innerHTML=kpis.map(k=>`<div class="kpi"><div class="spark">${k.ic}</div><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="hint">${k.hint}</div></div>`).join('');
+
+  // Funnel
+  const stages=[
+    {k:'abordado',label:'Abordados',color:'var(--blue)',keys:['abordado','respondeu','reuniao','fechado']},
+    {k:'respondeu',label:'Responderam',color:'var(--amber)',keys:['respondeu','reuniao','fechado']},
+    {k:'reuniao',label:'Reunião',color:'#a99bff',keys:['reuniao','fechado']},
+    {k:'fechado',label:'Fechamento',color:'var(--green)',keys:['fechado']},
+  ];
+  const counts=stages.map(s=>LEADS.filter(l=>s.keys.includes(l.status)).length);
+  const max=Math.max(counts[0],1);
+  $('#funnel').innerHTML=stages.map((s,i)=>{
+    const n=counts[i], w=Math.max(n/max*100,2);
+    const rate=i===0?'':(counts[i-1]?Math.round(n/counts[i-1]*100)+'%':'0%');
+    return `<div class="fstage"><div class="name">${s.label}</div>
+      <div class="bar"><div class="fill" style="width:${w}%;background:linear-gradient(90deg,${s.color},${s.color}bb)"></div>
+      ${rate?`<div class="rate">${rate}</div>`:''}</div>
+      <div class="num">${n}</div></div>`;
+  }).join('');
+
+  // Week chart (last 7 days of abordagem)
+  const days=[];for(let i=6;i>=0;i--){const d=new Date(t0);d.setDate(d.getDate()-i);days.push(d);}
+  const wc=days.map(d=>{
+    const next=new Date(d);next.setDate(d.getDate()+1);
+    const n=approached.filter(l=>{const x=parseLocal(l.dataAbordagem);return x>=d&&x<next;}).length;
+    return {d,n};
+  });
+  const wmax=Math.max(...wc.map(x=>x.n),1);
+  $('#weekchart').innerHTML=wc.map(x=>{
+    const h=x.n/wmax*100;
+    return `<div class="col"><div class="cbar" style="height:${Math.max(h,3)}%">${x.n?`<span>${x.n}</span>`:''}</div>
+      <div class="clbl">${x.d.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','')}</div></div>`;
+  }).join('');
+
+  // Recent
+  const recent=[...LEADS].sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).slice(0,6);
+  $('#recentTable').querySelector('tbody').innerHTML = recent.length?recent.map(l=>`<tr>
+    <td class="wrap"><b>${esc(l.nome)}</b></td>
+    <td>${esc([l.cidade,l.estado].filter(Boolean).join(' / '))||'<span class="muted">—</span>'}</td>
+    <td>${l.instagram?`<a class="iglink" href="${esc(l.instagram)}" target="_blank">${esc(igHandle(l.instagram))}</a>`:'<span class="muted">—</span>'}</td>
+    <td><span class="pill st-${l.status}">${stLabel(l.status)}</span></td>
+    <td class="muted">${fmtDate(l.updatedAt?new Date(l.updatedAt).toISOString():'')}</td>
+  </tr>`).join(''):`<tr><td colspan="5" class="empty">Nenhum lead ainda. Clique em <b>＋ Novo lead</b> ou use o Guia de Coleta.</td></tr>`;
+}
+
+/* ---------- Leads table ---------- */
+let statusFilter='';
+function buildStatusChips(){
+  const chips=[['','Todos'],...STATUS];
+  $('#statusChips').innerHTML=chips.map(c=>`<div class="chip ${statusFilter===c[0]?'active':''}" onclick="setStatusFilter('${c[0]}')">${c[1]}</div>`).join('');
+}
+function setStatusFilter(k){statusFilter=k;buildStatusChips();renderLeads();}
+function refreshEstados(){
+  const sel=$('#fEstado'),cur=sel.value;
+  const ests=[...new Set(LEADS.map(l=>l.estado).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todos estados</option>'+ests.map(e=>`<option>${esc(e)}</option>`).join('');
+  sel.value=cur;
+}
+function renderLeads(){
+  refreshEstados();
+  const q=$('#search').value.toLowerCase().trim();
+  const est=$('#fEstado').value;
+  let rows=LEADS.filter(l=>{
+    if(statusFilter&&l.status!==statusFilter)return false;
+    if(est&&l.estado!==est)return false;
+    if(q){const hay=[l.nome,l.cidade,l.estado,l.localizacao,l.socios,l.email,l.instagram].join(' ').toLowerCase();if(!hay.includes(q))return false;}
+    return true;
+  }).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+
+  const tb=$('#leadsTable').querySelector('tbody');
+  tb.innerHTML=rows.length?rows.map(l=>`<tr>
+    <td class="wrap"><b>${esc(l.nome)}</b></td>
+    <td class="wrap">${esc([l.cidade,l.estado].filter(Boolean).join(' / '))||'<span class="muted">—</span>'}<div class="muted" style="font-size:11px">${esc(l.localizacao||'')}</div></td>
+    <td class="wrap">${esc(l.socios)||'<span class="muted">—</span>'}</td>
+    <td>${esc(l.email)||'<span class="muted">—</span>'}</td>
+    <td>${l.instagram?`<a class="iglink" href="${esc(l.instagram)}" target="_blank">${esc(igHandle(l.instagram))}</a>`:'<span class="muted">—</span>'}</td>
+    <td>${l.seguidores?esc(l.seguidores):'<span class="muted">—</span>'}</td>
+    <td><span class="pill st-${l.status}">${stLabel(l.status)}</span></td>
+    <td><button class="actbtn" onclick="openLead('${l.id}')">Abrir</button></td>
+  </tr>`).join(''):`<tr><td colspan="8" class="empty">Nenhum lead encontrado.</td></tr>`;
+}
+
+/* ---------- Lead modal ---------- */
+function openLead(id){
+  const isEdit=typeof id==='string';
+  $('#modalTitle').textContent=isEdit?'Editar lead':'Novo lead';
+  $('#delBtn').style.display=isEdit?'inline-flex':'none';
+  const l=isEdit?LEADS.find(x=>x.id===id):{};
+  $('#f_id').value=isEdit?id:'';
+  const g=(f,v)=>$('#f_'+f).value=v||'';
+  g('nome',l.nome);g('cidade',l.cidade);g('estado',l.estado);g('localizacao',l.localizacao);
+  g('socios',l.socios);g('email',l.email);g('telefone',l.telefone);g('instagram',l.instagram);
+  g('seguidores',l.seguidores);g('site',l.site);g('notas',l.notas);
+  $('#f_status').value=l.status||'novo';
+  $('#f_dataAbordagem').value=l.dataAbordagem||'';
+  $('#leadOverlay').classList.add('show');
+}
+function closeLead(){$('#leadOverlay').classList.remove('show');}
+async function saveLead(){
+  const nome=$('#f_nome').value.trim();
+  if(!nome){toast('Informe o nome');return;}
+  const id=$('#f_id').value||uid();
+  const existing=LEADS.find(x=>x.id===id);
+  let dataAbordagem=$('#f_dataAbordagem').value;
+  const status=$('#f_status').value;
+  // se marcou abordado (ou além) e não tem data, coloca hoje
+  if(['abordado','respondeu','reuniao','fechado'].includes(status)&&!dataAbordagem)dataAbordagem=todayStr();
+  const lead={
+    id, nome,
+    cidade:$('#f_cidade').value.trim(), estado:$('#f_estado').value.trim().toUpperCase(),
+    localizacao:$('#f_localizacao').value.trim(), socios:$('#f_socios').value.trim(),
+    email:$('#f_email').value.trim(), telefone:$('#f_telefone').value.trim(),
+    instagram:$('#f_instagram').value.trim(), seguidores:$('#f_seguidores').value.trim(),
+    site:$('#f_site').value.trim(), status, dataAbordagem, notas:$('#f_notas').value.trim(),
+    kanban:existing?(existing.kanban||'leads'):'leads',
+    createdAt:existing?existing.createdAt:Date.now(), updatedAt:Date.now()
+  };
+  await putLead(lead);
+  LEADS=await loadAll();
+  closeLead();renderLeads();renderDashboard();
+  toast(existing?'Lead atualizado':'Lead adicionado ✓');
+}
+async function deleteLead(){
+  const id=$('#f_id').value;if(!id)return;
+  if(!confirm('Excluir este lead?'))return;
+  await delLead(id);LEADS=await loadAll();closeLead();renderLeads();renderDashboard();toast('Lead excluído');
+}
+
+/* ---------- Import / Export ---------- */
+function openImport(){$('#importText').value='';$('#fileInput').value='';$('#importOverlay').classList.add('show');}
+function closeImport(){$('#importOverlay').classList.remove('show');}
+function readFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>$('#importText').value=r.result;r.readAsText(f);}
+function parseCSV(text){
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());
+  if(!lines.length)return[];
+  const sep=lines[0].includes(';')?';':',';
+  const heads=lines[0].split(sep).map(h=>h.trim().toLowerCase());
+  const map={localizacao:'localizacao',endereco:'localizacao',socios:'socios',sócios:'socios',donos:'socios',instagram:'instagram',seguidores:'seguidores',telefone:'telefone',site:'site',status:'status',notas:'notas',nome:'nome',cidade:'cidade',estado:'estado',uf:'estado',email:'email'};
+  return lines.slice(1).map(line=>{
+    const cells=line.split(sep);
+    const o={};heads.forEach((h,i)=>{const key=map[h];if(key)o[key]=(cells[i]||'').trim();});
+    return o;
+  });
+}
+async function doImport(){
+  const raw=$('#importText').value.trim();
+  if(!raw){toast('Cole ou selecione um arquivo');return;}
+  let items=[];
+  try{
+    if(raw[0]==='['||raw[0]==='{'){const j=JSON.parse(raw);items=Array.isArray(j)?j:(j.leads||[j]);}
+    else items=parseCSV(raw);
+  }catch(err){toast('Formato inválido: '+err.message);return;}
+  const replace=$('#importReplace')&&$('#importReplace').checked;
+  if(replace){
+    if(!confirm('SUBSTITUIR TUDO: os leads atuais serão apagados e ficará só o que está no arquivo ('+items.length+' leads). Continuar?'))return;
+    await clearStore();LEADS=[];
+  }
+  const n=await upsertLeads(items);
+  LEADS=await loadAll();await syncCaptacoes();closeImport();$('#importReplace').checked=false;renderLeads();renderDashboard();toast((replace?'Base substituída: ':'')+n+' lead(s) ✓');
+}
+function download(name,content,type){
+  const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);
+}
+function exportJSON(){download('prospeccao-estetica_'+todayStr()+'.json',JSON.stringify(LEADS,null,2),'application/json');toast('Backup exportado ✓');}
+function exportCSV(){
+  const cols=['nome','localizacao','cidade','estado','email','socios','instagram','seguidores','telefone','site','status','dataAbordagem','notas'];
+  const head=cols.join(';');
+  const rows=LEADS.map(l=>cols.map(c=>{let v=l[c]==null?'':String(l[c]);if(v.includes(';')||v.includes('"')||v.includes('\n'))v='"'+v.replace(/"/g,'""')+'"';return v;}).join(';'));
+  download('prospeccao-estetica_'+todayStr()+'.csv','﻿'+[head,...rows].join('\n'),'text/csv');toast('Planilha exportada ✓');
+}
+async function wipeAll(){
+  if(!confirm('Isso apaga TODOS os leads deste navegador. Continuar?'))return;
+  if(!confirm('Tem certeza? Faça um backup antes se ainda não fez.'))return;
+  await clearStore();LEADS=[];renderLeads();renderDashboard();toast('Base apagada');
+}
+
+/* ---------- Captação ---------- */
+function capStats(c){
+  const key=c.key;
+  const captados=LEADS.filter(l=>normCity(l.cidade)===key).length;
+  const comIg=LEADS.filter(l=>normCity(l.cidade)===key && l.instagram && l.instagram!=='não encontrado').length;
+  const total=c.total>0?c.total:captados;
+  const faltam=Math.max(total-captados,0);
+  const pct=total>0?Math.min(captados/total*100,100):0;
+  const concluida=total>0 && captados>=total;
+  return {captados,comIg,total,faltam,pct,concluida};
+}
+const UF_NOME={MG:'Minas Gerais',RJ:'Rio de Janeiro',SP:'São Paulo',SC:'Santa Catarina',PR:'Paraná',RS:'Rio Grande do Sul',BA:'Bahia',PE:'Pernambuco',GO:'Goiás',CE:'Ceará',DF:'Distrito Federal'};
+function capLabel(s,c){return s.concluida?'Concluída':(s.captados>0?'Em andamento':(c&&c.iniciada?'Iniciada':'Na fila'));}
+function capPill(s,c){return s.concluida?'st-fechado':(s.captados>0?'st-abordado':(c&&c.iniciada?'st-respondeu':'st-novo'));}
+function capCard(c){
+  const s=capStats(c);
+  const reg=c.grupo?' reg':'';
+  return `<div class="capcard${reg}">
+    <div class="caphead">
+      <div class="capname">${esc(c.cidade)} <span class="pill ${capPill(s,c)}" style="margin-left:4px">${capLabel(s,c)}</span></div>
+      <div class="capnums">captados <b>${s.captados}</b> / faltam captar <b>${s.faltam}</b>${c.total>0?` <span class="muted">(meta ${c.total})</span>`:''}</div>
+    </div>
+    <div class="capbar"><div class="capfill" style="width:${s.captados===0?0:(s.pct||2)}%"></div></div>
+    <div class="capfoot">
+      <span class="muted" style="font-size:11.5px">${s.captados?`${s.comIg} com Instagram · ${s.captados-s.comIg} sem`:(c.iniciada?'iniciada — cole o pedido no Claude':'aguardando captação')}</span>
+      <span class="capacts">
+        <button class="btn-ini" onclick="iniciarCaptacao('${c.key}')">▶ Iniciar raspagem</button>
+        <button class="actbtn" onclick="editarMeta('${c.key}')">Meta</button>
+        <button class="actbtn" onclick="verCidade('${esc(c.cidade)}')">Ver leads</button>
+        <button class="actbtn" onclick="removerCaptacao('${c.key}')">✕</button>
+      </span>
+    </div>
+  </div>`;
+}
+function grupoAggregate(items){
+  let cap=0,tot=0;items.forEach(c=>{const s=capStats(c);cap+=s.captados;tot+=s.total;});
+  return {cap,tot,faltam:Math.max(tot-cap,0)};
+}
+function renderStateItems(items){
+  let out='',i=0;
+  while(i<items.length){
+    const c=items[i];
+    if(c.grupo){
+      const cluster=[];let j=i;
+      while(j<items.length&&items[j].grupo===c.grupo){cluster.push(items[j]);j++;}
+      const a=grupoAggregate(cluster);
+      out+=`<div class="capgrupo"><span class="gname">${esc(c.grupo)} <span class="muted" style="font-weight:600;font-size:11px">· ${cluster.length} regiões</span></span>`
+        +`<span class="gnums">captados <b>${a.cap}</b> / faltam <b>${a.faltam}</b></span></div>`;
+      out+=cluster.map(capCard).join('');
+      i=j;
+    } else { out+=capCard(c); i++; }
+  }
+  return out;
+}
+function renderCaptacao(){
+  const wrap=$('#capList');
+  if(!CAPTACOES.length){wrap.innerHTML='<div class="empty">Nenhuma cidade em captação. Registre uma acima e clique em “Copiar pedido p/ Claude”.</div>';return;}
+  const list=[...CAPTACOES].sort((a,b)=>((a.ordem??9999)-(b.ordem??9999))||(b.updatedAt||0)-(a.updatedAt||0));
+  let done=0,fila=0,and=0;
+  list.forEach(c=>{const s=capStats(c);if(s.concluida)done++;else if(s.captados===0&&!c.iniciada)fila++;else and++;});
+  const groups=[];const idx={};
+  list.forEach(c=>{const uf=(c.estado||'—').toUpperCase();if(idx[uf]==null){idx[uf]=groups.length;groups.push({uf,items:[]});}groups[idx[uf]].items.push(c);});
+  const summary=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    <span class="chip" style="cursor:default">${list.length} locais</span>
+    <span class="chip" style="cursor:default;color:var(--green)">✅ ${done} concluídos</span>
+    <span class="chip" style="cursor:default;color:var(--blue)">▶ ${and} em andamento</span>
+    <span class="chip" style="cursor:default;color:var(--muted)">🕓 ${fila} na fila</span>
+  </div>`;
+  wrap.innerHTML=summary+groups.map(g=>
+    `<div style="margin:10px 0 8px;font-size:12px;font-weight:800;letter-spacing:.5px;color:var(--muted);text-transform:uppercase">${esc(UF_NOME[g.uf]||g.uf)} <span style="color:#4a5a75">· ${g.items.length}</span></div>`
+    +renderStateItems(g.items)
+  ).join('');
+}
+async function syncCaptacoes(){
+  // garante um card para cada cidade que tem leads (sem sobrescrever meta existente)
+  const cities={};
+  LEADS.forEach(l=>{const k=normCity(l.cidade);if(k){if(!cities[k])cities[k]={cidade:(l.cidade||'').trim(),estado:(l.estado||'').trim()};}});
+  for(const k in cities){
+    if(!CAPTACOES.find(c=>c.key===k)){
+      await putCap({key:k,cidade:cities[k].cidade,estado:cities[k].estado,total:0,status:'andamento',updatedAt:Date.now()});
+    }
+  }
+  CAPTACOES=await loadAllCap();
+}
+async function registrarCaptacao(){
+  const cidade=$('#capCidade').value.trim();
+  if(!cidade){toast('Digite a cidade');return;}
+  const key=normCity(cidade);
+  const existing=CAPTACOES.find(c=>c.key===key);
+  const meta=parseInt($('#capMeta').value,10);
+  await putCap({key,cidade,estado:$('#capEstado').value.trim().toUpperCase(),
+    total:isNaN(meta)?(existing?existing.total:0):meta,status:'andamento',updatedAt:Date.now()});
+  CAPTACOES=await loadAllCap();
+  $('#capCidade').value='';$('#capEstado').value='';$('#capMeta').value='';
+  renderCaptacao();toast('Cidade registrada ✓');
+}
+function pedidoTexto(cidade,uf){
+  const local=cidade+(uf?(' - '+uf):'');
+  return `Captação: ${local}. Faça a puxada completa de clínicas e profissionais de estética (Google Maps + CNPJ + Instagram clínica por clínica), me mostre o contador "captados X / faltam captar Y" e entregue o arquivo JSON pronto para eu ingerir no sistema.`;
+}
+function copyText(t,msg){
+  const fallback=()=>{try{const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');document.body.removeChild(ta);toast(msg||'Copiado ✓');}catch(e){toast('Não consegui copiar — selecione manualmente');}};
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>toast(msg||'Copiado ✓'),fallback);}
+    else fallback();
+  }catch(e){fallback();}
+}
+function copiarPedido(){
+  const cidade=$('#capCidade').value.trim();
+  if(!cidade){toast('Digite a cidade primeiro');return;}
+  copyText(pedidoTexto(cidade,$('#capEstado').value.trim().toUpperCase()),'Pedido copiado — cole no Claude ✓');
+}
+function pedidoCidade(cidade,uf){copyText(pedidoTexto(cidade,uf),'Pedido copiado — cole no Claude ✓');}
+async function iniciarCaptacao(key){
+  const c=CAPTACOES.find(x=>x.key===key);if(!c)return;
+  if(MOTOR_ON){ rasparComMotor(c); return; }
+  // fallback sem motor: copia o pedido pro Claude
+  copyText(pedidoTexto(c.cidade,c.estado),'▶ Pedido de "'+c.cidade+'" copiado — cole no Claude ✓');
+  if(capStats(c).captados===0 && !c.iniciada){c.iniciada=true;c.updatedAt=Date.now();await putCap(c);CAPTACOES=await loadAllCap();renderCaptacao();}
+}
+
+/* ---------- Motor Local ---------- */
+const MOTOR_URL='http://localhost:8787';
+let MOTOR_ON=false;
+const MOTOR_JOBS={}; // key -> jobId
+async function checkMotor(){
+  try{const r=await fetch(MOTOR_URL+'/health',{cache:'no-store'});MOTOR_ON=r.ok;}
+  catch(e){MOTOR_ON=false;}
+  const el=$('#motorBadge');
+  if(el)el.innerHTML=MOTOR_ON
+    ?'🟢 Motor conectado'
+    :'⚪ Motor desligado — o botão copia o pedido pro Claude';
+  if(el)el.style.color=MOTOR_ON?'var(--green)':'var(--muted)';
+  return MOTOR_ON;
+}
+async function upsertLeads(items){
+  let n=0;const valid=STATUS.map(s=>s[0]);
+  const fill=(cur,inc)=>((cur==null||cur==='')&&inc!=null&&inc!=='')?inc:cur;
+  for(const it of items){
+    if(!it.nome||!String(it.nome).trim())continue;
+    const ex=LEADS.find(l=>l.id===it.id);
+    if(ex){
+      // MERGE seguro: preserva a qualificação do usuário (kanban/status/data/notas);
+      // só completa campos que estão vazios (ex.: Instagram/seguidores).
+      await putLead(Object.assign({},ex,{
+        nome:String(it.nome).trim()||ex.nome,
+        instagram:fill(ex.instagram,it.instagram),
+        seguidores:fill(ex.seguidores,it.seguidores!=null?String(it.seguidores):''),
+        telefone:fill(ex.telefone,it.telefone),
+        localizacao:fill(ex.localizacao,it.localizacao),
+        socios:fill(ex.socios,it.socios),
+        email:fill(ex.email,it.email),
+        site:fill(ex.site,it.site),
+        updatedAt:Date.now()
+      }));
+    } else {
+      const status=valid.includes(it.status)?it.status:'novo';
+      await putLead({
+        id:it.id||uid(), nome:String(it.nome).trim(),
+        cidade:it.cidade||'', estado:(it.estado||'').toUpperCase(), localizacao:it.localizacao||'',
+        socios:it.socios||'', email:it.email||'', telefone:it.telefone||'',
+        instagram:it.instagram||'', seguidores:it.seguidores!=null?String(it.seguidores):'',
+        site:it.site||'', status, dataAbordagem:it.dataAbordagem||(['abordado','respondeu','reuniao','fechado'].includes(status)?todayStr():''),
+        notas:it.notas||'', kanban:it.kanban||'leads', createdAt:it.createdAt||Date.now(), updatedAt:Date.now()
+      });
+    }
+    n++;
+  }
+  return n;
+}
+async function rasparComMotor(c){
+  if(MOTOR_JOBS[c.key]){toast('Essa cidade já está captando…');return;}
+  try{
+    const r=await fetch(MOTOR_URL+'/captar?cidade='+encodeURIComponent(c.cidade)+'&uf='+encodeURIComponent(c.estado||''),{cache:'no-store'});
+    const j=await r.json();
+    if(!j.jobId){toast('Motor não iniciou: '+(j.erro||'erro'));return;}
+    MOTOR_JOBS[c.key]=j.jobId;
+    c.iniciada=true;c.updatedAt=Date.now();await putCap(c);CAPTACOES=await loadAllCap();renderCaptacao();
+    toast('▶ Raspagem de '+c.cidade+' iniciada pelo motor');
+    poll();
+    async function poll(){
+      try{
+        const s=await(await fetch(MOTOR_URL+'/status?jobId='+j.jobId,{cache:'no-store'})).json();
+        if(s.leads&&s.leads.length){await upsertLeads(s.leads);LEADS=await loadAll();}
+        // atualiza a meta (total do motor) e status
+        const cap=CAPTACOES.find(x=>x.key===c.key);
+        if(cap){cap.total=s.total||cap.total;if(s.captados>0)cap.iniciada=false;await putCap(cap);CAPTACOES=await loadAllCap();}
+        renderCaptacao();renderDashboard();
+        if(s.done){
+          delete MOTOR_JOBS[c.key];
+          if(s.error)toast('Motor: erro — '+s.error);
+          else toast('✅ '+c.cidade+': '+(s.leads?s.leads.length:0)+' leads captados');
+          return;
+        }
+      }catch(e){ delete MOTOR_JOBS[c.key]; toast('Motor caiu durante a raspagem'); await checkMotor(); return; }
+      setTimeout(poll,2500);
+    }
+  }catch(e){ MOTOR_ON=false; await checkMotor(); toast('Não consegui falar com o motor'); }
+}
+async function editarMeta(key){
+  const c=CAPTACOES.find(x=>x.key===key);if(!c)return;
+  const v=prompt('Meta de leads para '+c.cidade+' (total Y):',c.total||'');
+  if(v===null)return;const n=parseInt(v,10);
+  c.total=isNaN(n)?0:n;c.updatedAt=Date.now();await putCap(c);CAPTACOES=await loadAllCap();renderCaptacao();
+}
+async function removerCaptacao(key){
+  const c=CAPTACOES.find(x=>x.key===key);if(!c)return;
+  if(!confirm('Remover o acompanhamento de '+c.cidade+'? (os leads NÃO são apagados)'))return;
+  await delCap(key);CAPTACOES=await loadAllCap();renderCaptacao();toast('Removido');
+}
+function verCidade(cidade){
+  document.querySelector('#nav button[data-view="leads"]').click();
+  $('#search').value=cidade;renderLeads();
+}
+function readFileCap(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>$('#capIngest').value=r.result;r.readAsText(f);}
+async function ingestCaptacao(){
+  const raw=$('#capIngest').value.trim();
+  if(!raw){toast('Cole ou selecione um arquivo');return;}
+  let items=[];
+  try{
+    if(raw[0]==='['||raw[0]==='{'){const j=JSON.parse(raw);items=Array.isArray(j)?j:(j.leads||[j]);}
+    else items=parseCSV(raw);
+  }catch(err){toast('Formato inválido: '+err.message);return;}
+  const n=await upsertLeads(items);
+  LEADS=await loadAll();await syncCaptacoes();$('#capIngest').value='';$('#capFile').value='';
+  renderCaptacao();renderLeads();renderDashboard();toast(n+' lead(s) ingeridos ✓');
+}
+
+/* ---------- Kanban (prospecção diária) ---------- */
+const KANBAN_COLS=[
+  ['leads','Leads'],
+  ['seguindo','Começou a seguir'],
+  ['contato1','Primeiro contato'],
+  ['respondeu','Respondeu?'],
+  ['fup1','1º follow up'],
+  ['fup2','2º follow up'],
+  ['fup3','3º follow up']
+];
+const kbStage=l=>{const k=l.kanban;return KANBAN_COLS.some(c=>c[0]===k)?k:'leads';};
+function kbCard(l){
+  const ig=(l.instagram&&l.instagram.includes('instagram.com'))?igHandle(l.instagram):'';
+  const seg=(l.seguidores&&/[0-9]/.test(l.seguidores))?l.seguidores:'';
+  return `<div class="kbcard" draggable="true" data-id="${l.id}" ondragstart="kbDragStart(event,this)" ondragend="this.classList.remove('dragging')" onclick="openLead('${l.id}')">
+    <div class="n">${esc(l.nome)}</div>
+    <div class="meta">
+      ${l.cidade?`<span class="mini">${esc(l.cidade)}${l.estado?'/'+esc(l.estado):''}</span>`:''}
+      ${ig?`<span class="mini ig">${esc(ig)}</span>`:''}
+      ${seg?`<span class="mini seg">${esc(seg)} seg</span>`:''}
+    </div>
+  </div>`;
+}
+function renderKanban(){
+  const board=$('#kanbanBoard');if(!board)return;
+  const q=(($('#kbSearch')||{}).value||'').toLowerCase().trim();
+  const filtered=LEADS.filter(l=>!q||(l.nome||'').toLowerCase().includes(q)||(l.cidade||'').toLowerCase().includes(q)||(l.instagram||'').toLowerCase().includes(q));
+  board.innerHTML=KANBAN_COLS.map(([key,label])=>{
+    const items=filtered.filter(l=>kbStage(l)===key);
+    const cards=items.length?items.map(kbCard).join(''):'<div class="kbempty">vazio</div>';
+    return `<div class="kbcol" data-col="${key}" ondragover="kbOver(event,this)" ondragleave="this.classList.remove('drop')" ondrop="kbDrop(event,this)">
+      <div class="kbhead"><span class="t">${label}</span><span class="c">${items.length}</span></div>
+      <div class="kbbody">${cards}</div>
+    </div>`;
+  }).join('');
+}
+let KB_DRAG=null;
+function kbDragStart(e,el){KB_DRAG=el.dataset.id;el.classList.add('dragging');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',KB_DRAG);}catch(_){}}
+function kbOver(e,col){e.preventDefault();col.classList.add('drop');e.dataTransfer.dropEffect='move';}
+async function kbDrop(e,col){
+  e.preventDefault();col.classList.remove('drop');
+  const id=KB_DRAG||(e.dataTransfer&&e.dataTransfer.getData('text/plain'));KB_DRAG=null;
+  const stage=col.dataset.col;const l=LEADS.find(x=>x.id===id);
+  if(!l||kbStage(l)===stage)return;
+  l.kanban=stage;l.updatedAt=Date.now();
+  // sincroniza com as métricas do Dashboard (abordados/respondeu)
+  if(stage==='contato1'&&!l.dataAbordagem){l.dataAbordagem=todayStr();if(l.status==='novo')l.status='abordado';}
+  if(stage==='respondeu'){if(!l.dataAbordagem)l.dataAbordagem=todayStr();if(['novo','abordado'].includes(l.status))l.status='respondeu';}
+  if((stage==='fup1'||stage==='fup2'||stage==='fup3')&&!l.dataAbordagem){l.dataAbordagem=todayStr();if(l.status==='novo')l.status='abordado';}
+  await putLead(l);LEADS=await loadAll();renderKanban();renderDashboard();
+}
+
+/* ---------- Seed: Juiz de Fora (primeira abertura) ---------- */
+const SEED_JF=[
+  {"id":"jf-01","nome":"L'assis Clinic Estética e Emagrecimento","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Mal. Floriano Peixoto, 550","telefone":"(32) 99844-9114","socios":"Mirela Assis","instagram":"https://www.instagram.com/lassisclinic","seguidores":"13,4 mil","site":"lassisclinic.my.canva.site","notas":"Face Sculpt / Harmonização"},
+  {"id":"jf-02","nome":"Clínica Oliveira","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Santo Antônio, 415 - Sl 11","telefone":"(32) 99149-0017","instagram":"https://www.instagram.com/clinica.oliveira.jf","seguidores":"5,4 mil","notas":"Sculptra/preenchimento"},
+  {"id":"jf-03","nome":"AP Clinic Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2872 - Sala 1413","telefone":"(32) 98449-8974","instagram":"https://www.instagram.com/clinic.ap","seguidores":"2.475","notas":"Harmonização facial/corporal"},
+  {"id":"jf-04","nome":"Clínica Estética Monique Meirelles","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Oscar Vidal, 274 - Sl 906","telefone":"(32) 98703-2467","socios":"Dra. Monique Rodrigues Meirelles","instagram":"https://www.instagram.com/esteticamoniquemeirelles","seguidores":"16,2 mil","notas":"CNPJ 45.212.680/0001-45"},
+  {"id":"jf-05","nome":"Estética Rios","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Dom Viçoso, 16 - Alto dos Passos","telefone":"(32) 99853-2029","instagram":"https://www.instagram.com/clinicaesteticarios","seguidores":"8,3 mil","notas":"Laser/capilar"},
+  {"id":"jf-06","nome":"Clínica de Estética Duo Belle","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2370/ 1304","instagram":"https://www.instagram.com/duobelleestetica","seguidores":"~80 (a confirmar)","notas":"Conferir se é o perfil oficial"},
+  {"id":"jf-07","nome":"Clínica e Spa Cia da Beleza Unissex","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Mal. Setembrino de Carvalho, 286","telefone":"(32) 3222-7579","instagram":"não encontrado","seguidores":"não encontrado","notas":"Sem perfil próprio identificável"},
+  {"id":"jf-08","nome":"Aline Rodrigues Limpeza de Pele JF","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 1863","telefone":"(32) 99124-9351","socios":"Aline Rodrigues","instagram":"https://www.instagram.com/alinerodrigues.esteticista","seguidores":"2.767","notas":"Esteticista · laser/limpeza"},
+  {"id":"jf-09","nome":"Dra Bianca Vital - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Halfeld, 414 - Sl 708","telefone":"(32) 99153-8287","socios":"Bianca Vital Caetano (CRBM3 15077)","instagram":"https://www.instagram.com/dra.biancavital","seguidores":"39,8 mil","notas":"Full Face 40+"},
+  {"id":"jf-10","nome":"Mariana Costa Estética e Relaxamento","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2679 - Sl 802","telefone":"(32) 99917-2237","socios":"Mariana Costa","instagram":"https://www.instagram.com/clinicamarianacosta","seguidores":"5.621","notas":"Esteticista e cosmetóloga"},
+  {"id":"jf-11","nome":"Bodyprime Juiz de Fora","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 3139","telefone":"(32) 99843-4276","instagram":"https://www.instagram.com/bodyprime.juizdefora","seguidores":"15 mil","site":"bodyprime.com.br","notas":"Rede de franquias"},
+  {"id":"jf-12","nome":"Royal Face estética facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Morais e Castro, 422","telefone":"(32) 98414-5007","instagram":"https://www.instagram.com/royalface.juizdefora","seguidores":"14 mil","notas":"Rede Royal Face"},
+  {"id":"jf-13","nome":"Corpo S/A (Alto dos Passos)","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Dom Viçoso, 198 - Sl 403","telefone":"(32) 99917-1361","socios":"Mariana Montorsi","instagram":"não encontrado","seguidores":"não encontrado","notas":"3 unidades em JF"},
+  {"id":"jf-14","nome":"Clínica Única - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco (Ed. Stella Central)","telefone":"(32) 99903-7433","instagram":"https://www.instagram.com/clinicaunicajf","seguidores":"9 mil"},
+  {"id":"jf-15","nome":"Mônica Rosas Estética Facial e Corporal","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Cel. Barros, 50 - sala 1","telefone":"(32) 99947-4516","socios":"Mônica Rosas","instagram":"https://www.instagram.com/monicarosas.estetica","seguidores":"1.964","notas":"Limpeza de pele/skincare"},
+  {"id":"jf-16","nome":"Fabiana Mello Clínica de Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 1871/1411","telefone":"(32) 99827-5643","socios":"Fabiana Ferreira de Mello","instagram":"https://www.instagram.com/drafabianaferreirademello","seguidores":"18 mil","notas":"Full Face"},
+  {"id":"jf-17","nome":"NuLaser e Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Braz Bernardino, 105","telefone":"(32) 99856-2385","socios":"JKIV Serviços em Estética LTDA-ME","instagram":"https://www.instagram.com/sounulaser","seguidores":"a confirmar","notas":"CNPJ 47.315.325/0001-27"},
+  {"id":"jf-18","nome":"Dra Larisse Miana - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 1871 - Sl 2014","telefone":"(32) 99953-8814","socios":"Larisse Miana (CRO 50535)","instagram":"https://www.instagram.com/dralarissemiana","seguidores":"4.310"},
+  {"id":"jf-19","nome":"ENTRE PAUSAS - SPA Terapêutico","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Antônio Dias Tostes, 330","telefone":"(32) 99968-5788","socios":"Mariana Quina","instagram":"https://www.instagram.com/entrepausas.spa","seguidores":"4,8 mil","notas":"Massagem/spa"},
+  {"id":"jf-20","nome":"Vítalle Centro de Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. São Mateus, 236/201","telefone":"(32) 98874-0287","socios":"Ana Paula (fundadora)","instagram":"https://www.instagram.com/vitallecentroestetica","seguidores":"1.090"},
+  {"id":"jf-21","nome":"INSTITUTO EDRAS - Saúde Integrativa e Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Rua Oscar Vidal, 307/1003","telefone":"(32) 99197-6969","socios":"Dra. Sâmia Lacorte","instagram":"https://www.instagram.com/institutoedras","seguidores":"51,4 mil"},
+  {"id":"jf-22","nome":"Dra. Elaine Cugola - Cirurgia Plástica","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Catarina de Castro, 75","telefone":"(32) 3216-2226","socios":"Dra. Elaine Cugola (SBCP)","instagram":"https://www.instagram.com/draelainecugola","seguidores":"9,5 mil"},
+  {"id":"jf-23","nome":"Clínica Vestha (Depilação a Laser)","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Halfeld, 651","telefone":"(32) 3303-0181","socios":"Dr. Geraldo Furtado Lamas","instagram":"https://www.instagram.com/clinicavestha","seguidores":"1,2 mil"},
+  {"id":"jf-24","nome":"Dra. Amanda Bartoli - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Marechal Deodoro, 796","telefone":"(32) 98832-2008","socios":"Amanda Bartoli (dentista)","instagram":"https://www.instagram.com/dra.amandabartoli","seguidores":"5.579"},
+  {"id":"jf-25","nome":"Dra. Isabele Bragança","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2406 - Sl 309","telefone":"(32) 99119-2561","socios":"Isabele Bragança","instagram":"https://www.instagram.com/dra.isabelebraganca","seguidores":"17,6 mil"},
+  {"id":"jf-26","nome":"Dr. Jarbas Aguiar - Fisioterapeuta Dermatofuncional","cidade":"Juiz de Fora","estado":"MG","localizacao":"Galeria Pio X, 720 - Sala 207B","telefone":"(32) 99850-1207","socios":"Jarbas Aguiar","instagram":"https://www.instagram.com/dr.jarbasaguiar","seguidores":"1,1 mil","site":"studiorhuanfontes.com.br"},
+  {"id":"jf-27","nome":"Espaço Peônia Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2406 - Sl 1209","telefone":"(32) 98812-3832","socios":"Dra. Clara Freitas","instagram":"https://www.instagram.com/espacopeoniahof","seguidores":"2,2 mil"},
+  {"id":"jf-28","nome":"Clínica Dra. Renata Rodrigues","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2872 - 1714","telefone":"(32) 99905-3098","socios":"Renata Rodrigues (CRO 78565)","instagram":"https://www.instagram.com/dra.rodriguesrenata","seguidores":"1.584"},
+  {"id":"jf-29","nome":"Dra. Lívia Durso - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Luz Interior, 330 - Sl 207","telefone":"(32) 99944-6551","socios":"Lívia Durso Acácio","instagram":"https://www.instagram.com/liviadurso_","seguidores":"4.752"},
+  {"id":"jf-30","nome":"Dra. Jhuliana Freitas - Harmonização","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2595","telefone":"(32) 99938-6721","socios":"Jhuliana Freitas (farmacêutica esteta)","instagram":"https://www.instagram.com/jhulianafreitass","seguidores":"2.643"},
+  {"id":"jf-31","nome":"Dra Tatiana Sicardi - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2001/808","telefone":"(32) 98864-7921","socios":"Tatiana Sicardi (dentista)","instagram":"https://www.instagram.com/dra.tatianasicardi","seguidores":"4.765"},
+  {"id":"jf-32","nome":"Dra Jacqueline Frossard - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Batista de Oliveira, 1164 - Sala 1116","telefone":"(32) 98800-2000","socios":"Jacqueline Frossard (CROMG 48992)","instagram":"https://www.instagram.com/drajacquelinefrossard","seguidores":"96 mil","notas":"Mini Face Lifting"},
+  {"id":"jf-33","nome":"Espaço Facial - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Presidente Itamar Franco, 140 - l1","telefone":"(32) 99865-9998","socios":"Dra. Mariana Campelo (RT)","instagram":"https://www.instagram.com/espacofacial_juizdefora","seguidores":"11,4 mil"},
+  {"id":"jf-34","nome":"Dra Andressa Coutinho - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Oscar Vidal, 150 - Sl 301","telefone":"(32) 98814-7150","socios":"Andressa Coutinho (CROMG 45475)","instagram":"https://www.instagram.com/draandressa.coutinho","seguidores":"5.188"},
+  {"id":"jf-35","nome":"Vinícius Medina - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Oscar Vidal, 274 - Sl 903","telefone":"(32) 99125-6546","socios":"Vinicius Medina (CROMG 45.299)","instagram":"https://www.instagram.com/viniciusmedinaa","seguidores":"20,5 mil"},
+  {"id":"jf-36","nome":"Dra. Laura Oliveira - Harmonização Orofacial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2872 - Sl 1714","telefone":"(32) 98406-2801","socios":"Laura Oliveira","instagram":"https://www.instagram.com/laura_aoliveira","seguidores":"4,5 mil"},
+  {"id":"jf-37","nome":"Dra. Beatriz Niki - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2288 - sala 1104","telefone":"(32) 99109-4853","socios":"Beatriz Niki Ribeiro (CRO-MG 58462)","instagram":"https://www.instagram.com/drabeatrizniki","seguidores":"a confirmar"},
+  {"id":"jf-38","nome":"Clínica Orofacial Odontologia Integrada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 2406 - Sl 708","socios":"Dr. Jairo Sousa e Dr. Márcio","instagram":"https://www.instagram.com/clinica.orofacial","seguidores":"1,3 mil","notas":"CNPJ 27.094.353/0001-54"},
+  {"id":"jf-39","nome":"SL OdontoFacial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 1871 - Sl 2210","telefone":"(32) 99944-4218","socios":"Jordana e Alan Schmitt","instagram":"https://www.instagram.com/slodontofacial","seguidores":"1,2 mil"},
+  {"id":"jf-40","nome":"Dra. Stephânia Martins - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Espírito Santo, 1115 - Sl 2011","telefone":"(32) 99972-1122","socios":"Stephânia Martins (dentista)","instagram":"https://www.instagram.com/dra.stephaniamartins","seguidores":"4.553"},
+  {"id":"jf-41","nome":"Dra. Patricia Cataldo / Dra. Glenda Prado","cidade":"Juiz de Fora","estado":"MG","localizacao":"R. Batista de Oliveira, 1164 - Sl 1301","telefone":"(32) 99925-0224","socios":"Patricia Cataldo e Glenda Prado","instagram":"https://www.instagram.com/paticataldo","seguidores":"a confirmar"},
+  {"id":"jf-42","nome":"Clínica Dra Carolina Sanches","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Presidente Itamar Franco, 4001 - Sl 517","telefone":"(32) 98442-0919","socios":"Dra. Carolina Sanches (CRM 92542)","instagram":"https://www.instagram.com/dra.carolinasanches","seguidores":"10,8 mil","notas":"Instituto Essenza"},
+  {"id":"jf-43","nome":"Dutra Clinic - Estética Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Av. Barão do Rio Branco, 1871 - sala 801","telefone":"(32) 99926-9886","socios":"Dra. Jaqueline Dutra (CRBM 25307)","instagram":"https://www.instagram.com/dra_jaquelinedutra","seguidores":"3 mil"}
+];
+async function seedJF(){
+  if(localStorage.getItem('seed_jf_v1'))return;
+  const existing=new Set(LEADS.map(l=>l.id));
+  for(const s of SEED_JF){
+    if(existing.has(s.id))continue;
+    await putLead(Object.assign({email:'',site:'',socios:'',notas:'',status:'novo',dataAbordagem:'',createdAt:Date.now(),updatedAt:Date.now()},s));
+  }
+  if(!CAPTACOES.find(c=>c.key===normCity('Juiz de Fora')))
+    await putCap({key:normCity('Juiz de Fora'),cidade:'Juiz de Fora',estado:'MG',total:43,status:'concluida',ordem:1,updatedAt:Date.now()});
+  localStorage.setItem('seed_jf_v1','1');
+}
+
+/* ---------- Seed: fila de cidades ---------- */
+const SEED_CITIES=[
+  ['Betim','MG'],['Belo Horizonte','MG'],['Uberlândia','MG'],
+  ['Rio de Janeiro - Capital','RJ'],['Resende','RJ'],['Três Rios','RJ'],['Nova Iguaçu','RJ'],
+  ['São Paulo - Capital','SP'],['Guarulhos','SP'],['Campinas','SP'],['São Bernardo do Campo','SP'],['Santo André','SP'],['Sorocaba','SP'],['Osasco','SP'],
+  ['Joinville','SC'],['Florianópolis','SC'],['Blumenau','SC'],['São José','SC'],['Itajaí','SC'],['Chapecó','SC'],['Palhoça','SC'],['Criciúma','SC'],
+  ['Curitiba','PR'],
+  ['Porto Alegre','RS'],
+  ['Salvador','BA'],
+  ['Recife','PE'],
+  ['Goiânia','GO'],
+  ['Fortaleza','CE'],
+  ['Brasília','DF']
+];
+async function seedCities(){
+  if(localStorage.getItem('seed_cities_v1'))return;
+  let ordem=2; // JF fica com ordem 1
+  for(const [cidade,uf] of SEED_CITIES){
+    const key=normCity(cidade);
+    if(!CAPTACOES.find(c=>c.key===key)){
+      await putCap({key,cidade,estado:uf,total:0,status:'fila',ordem,updatedAt:Date.now()-(1000000-ordem*100)});
+    }
+    ordem++;
+  }
+  localStorage.setItem('seed_cities_v1','1');
+}
+
+/* ---------- Seed: dividir capitais em regiões ---------- */
+const BIG_REGIONS=[
+  {base:'São Paulo - Capital', nome:'São Paulo', estado:'SP', grupo:'São Paulo (Capital)', regioes:['Centro','Zona Sul','Zona Oeste','Zona Norte','Zona Leste']},
+  {base:'Rio de Janeiro - Capital', nome:'Rio de Janeiro', estado:'RJ', grupo:'Rio de Janeiro (Capital)', regioes:['Centro','Zona Sul','Zona Norte','Zona Oeste','Barra da Tijuca']},
+  {base:'Belo Horizonte', nome:'Belo Horizonte', estado:'MG', grupo:'Belo Horizonte', regioes:['Centro-Sul','Oeste','Leste','Norte','Pampulha','Barreiro']}
+];
+async function seedRegions(){
+  if(localStorage.getItem('seed_regions_v1'))return;
+  for(const b of BIG_REGIONS){
+    const baseKey=normCity(b.base);
+    const existing=CAPTACOES.find(c=>c.key===baseKey);
+    const baseOrdem=existing?(existing.ordem??500):500;
+    // só divide se a cidade inteira ainda não tem leads
+    const captados=LEADS.filter(l=>normCity(l.cidade)===baseKey).length;
+    if(captados>0)continue;
+    if(existing)await delCap(baseKey);
+    let i=0;
+    for(const r of b.regioes){
+      const cidade=b.nome+' — '+r;
+      const key=normCity(cidade);
+      if(!CAPTACOES.find(c=>c.key===key)){
+        await putCap({key,cidade,estado:b.estado,grupo:b.grupo,total:0,status:'fila',ordem:baseOrdem+i/100,updatedAt:Date.now()});
+      }
+      i++;
+    }
+  }
+  localStorage.setItem('seed_regions_v1','1');
+}
+
+/* ---------- Seed: leads do Betim (capturados pelo Motor) ---------- */
+const SEED_BETIM=/*__BETIM__*/[{"id":"betim-mg-001","nome":"Top Center- Clínica de Estética Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Gov. Valadares, 851 - Sl 308","telefone":"(31) 97324-7797","instagram":"https://www.instagram.com/topcenterestetica","seguidores":"1,8 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-002","nome":"Royal Face Clínica de Estética - Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Prof. Clóvis Salgado, 32","telefone":"(31) 3160-6006","instagram":"https://www.instagram.com/royalfacebetim","seguidores":"8,1 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-003","nome":"Clínica Yaga - Estética Médica Integrada, GoldIncision, Harmonização Glútea e Facial","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Pres. Juscelino Kubitschek, 474","telefone":"(31) 2571-2575","instagram":"https://www.instagram.com/clinicayaga","seguidores":"31,5 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-004","nome":"Clinica Estética para Todos","cidade":"Betim","estado":"MG","localizacao":"Médico ·  · Av. Bandeirantes, 1045 - Lj 11 e 12","telefone":"(31) 3787-1834","instagram":"https://www.instagram.com/esteticaptodos","seguidores":"15,8 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-005","nome":"Clínica de Estética Betim Stética - Massagem, Saúde, Estética e Bem-estar.","cidade":"Betim","estado":"MG","localizacao":"Massoterapeuta · R. Inconfidência, 402 - Sl 101 Piso 2","telefone":"(31) 3159-5000","instagram":"https://www.instagram.com/betimstetica","seguidores":"1,1 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-006","nome":"Clínica La Pelle","cidade":"Betim","estado":"MG","localizacao":"Serviço de depilação a laser ·  · R. Santa Cruz, 402 - Sl 1306","telefone":"(31) 3532-1122","instagram":"https://www.instagram.com/lapelle_betim","seguidores":"5,7 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-007","nome":"Clínica de Estética Ana Luiza Assis","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Gov. Valadares, n° 851 - Salas 703 e 704","telefone":"(31) 99143-4423","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-008","nome":"L’Atelier BioClinique - Spa & Clínica de Estética Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Horizonte Belo, 234 - Casa B","telefone":"(31) 92006-7138","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-009","nome":"Dra. Adriana Lemos - Estética Médica Integrada, Harmonização Glútea e Facial","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Pres. Juscelino Kubitschek, 474 - sala 04","telefone":"(31) 2571-2575","instagram":"https://www.instagram.com/draadrianalemos","seguidores":"32 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-010","nome":"Clínica Essencial Saúde Integrativa e Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada ·  · R. Inspetor Jaime Caldeira, 785","telefone":"(31) 97532-4547","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-011","nome":"EmagreForma - Clínica de Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Pedra Azul, 1 seção","telefone":"(31) 99082-9507","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-012","nome":"Instituto Concept - Estética Avançada Ortomolecular em Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Tóquio, 334","telefone":"(31) 99544-2019","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-013","nome":"Dra Juliene Ribeiro - Harmonização Facial","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Comercial Asturias - Av. Amazonas, 1446","telefone":"(31) 98403-1358","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-014","nome":"Clinica de Estética Rosa De Saron🌸","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Belo Horizonte, 352c - Jardim Teresopolis","telefone":"(31) 99236-6868","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-015","nome":"Rede Fisio e Forma","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Xingu, 25","telefone":"(31) 98883-5624","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-016","nome":"Samira Lisboa Biomédica esteta LTDA","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Amazonas, 1312","telefone":"(31) 99748-6297","instagram":"https://www.instagram.com/samiralisboabiomed","seguidores":"3,6 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-017","nome":"Regly Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Mal. Humberto de Alençar Castelo Branco, 325","telefone":"(31) 99742-4073","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-018","nome":"Clínica Rarus - Estética e Saúde","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada ·  · R. Horizonte Belo, 375","telefone":"(31) 99444-0388","instagram":"https://www.instagram.com/clinicararus","seguidores":"590","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-019","nome":"Keila Lopes Saúde e Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Gov. Valadares, 737 - 901","telefone":"(31) 99265-6917","instagram":"https://www.instagram.com/drakeilalopes","seguidores":"12,1 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-020","nome":"Clínica Estética Beleza para Todos","cidade":"Betim","estado":"MG","localizacao":"Esteticista ·  · R. São Pedro, 111","telefone":"(31) 99802-0710","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-021","nome":"Essence Clínica de Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Dom Afonso Henrique, 789","telefone":"(31) 99066-5239","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-022","nome":"Clínica Bernini Integrada & SPA","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada · R. Cândido Cardoso Miranda, 92","telefone":"(31) 99586-6564","instagram":"https://www.instagram.com/berniniintegrada","seguidores":"3,6 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-023","nome":"Renovare Clínica de Estética Avançada e Bem-Estar","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. do Rosário, 1181","telefone":"(31) 99311-2715","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-024","nome":"Clínica Ellora estética e odontologia","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Gov. Valadares, 851","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-025","nome":"Clínica Dra Danubia Pêgo","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Edifício Unicenter - Av. Juiz Marco Túlio Isaac, 3540 - Sala 501","telefone":"(31) 99524-4753","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-026","nome":"Clínica de Estética Rosângela Alves","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Rio Madeira, 377","telefone":"(31) 99898-4875","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-027","nome":"VitaLife Clínica de Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Rua Clotilde Borges, 370 - Sl 403","telefone":"(31) 99666-0267","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-028","nome":"Biomédica Esteta Betim - Dra. Gabriela Sousa","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Ericeira, n° 870 - Sl 8","telefone":"(31) 99075-7515","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-029","nome":"Persatra","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Cícero Rabêlo de Vasconcelos, 531","telefone":"(31) 99476-9374","instagram":"https://www.instagram.com/persatra","seguidores":"10,4 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-030","nome":"Ana Luisa | Saúde e Estética Avançada | Betim","cidade":"Betim","estado":"MG","telefone":"(31) 98812-8618","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-031","nome":"Clinica Verônica Aguiar","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Edifício Unicenter - Av. Juiz Marco Túlio Isaac, 3540 - Sl 507","telefone":"(31) 99669-1117","instagram":"https://www.instagram.com/veronicaaguia.r","seguidores":"1,9 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-032","nome":"Clínica Estética Bio Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Margaridas, 121","telefone":"(31) 99077-1895","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-033","nome":"Clínica Denise Trindade","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada ·  · Rua Imperatriz, 27","telefone":"(31) 99137-4972","instagram":"https://www.instagram.com/denisestrindade.","seguidores":"9,4 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-034","nome":"Clínica Nishimoto Betim","cidade":"Betim","estado":"MG","localizacao":"Consultório médico ·  · Monte Carmo Shopping - Av. Juiz Marco Túlio Isaac, 1119 - Lj 1116","telefone":"(31) 99559-6040","instagram":"https://www.instagram.com/clinicanishimoto","seguidores":"42,3 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-035","nome":"Clínica de Estética Melry Beauty Academy","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Rua Afríca, 36, Petrovale, Betim","telefone":"(31) 99185-6899","instagram":"https://www.instagram.com/cleandermeestetica","seguidores":"5,4 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-036","nome":"Espaço Be+ | Saúde e Bem Estar - Clínica Monte Sião","cidade":"Betim","estado":"MG","localizacao":"Clínico geral ·  · Av. São Caetano, 21","telefone":"(31) 3356-0318","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-037","nome":"Allure Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Belo Horizonte, 1365","telefone":"(31) 99732-5411","instagram":"https://www.instagram.com/allureesteticaavancada_","seguidores":"1,2 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-038","nome":"Corpo Dourado – Clínica de Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada · Av. Coletora Artur Trindade, 777","telefone":"(31) 99595-0152","instagram":"https://www.instagram.com/corpo_dourado_estetica","seguidores":"4,4 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-039","nome":"Centro Estético Jaqueline Borges","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Tailândia, 386","telefone":"(31) 99348-6712","instagram":"https://www.instagram.com/cejaquelineborges","seguidores":"2,7 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-040","nome":"BELEZA COMPLETA BETIM","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Rio de Janeiro, 182 - Lj 5 ou 6","telefone":"(31) 99810-6411","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-041","nome":"Dra. Monalisy Rodrigues","cidade":"Betim","estado":"MG","localizacao":"Dermatologista ·  · R. Felipe dos Santos, 674 - Sala 901","telefone":"(31) 3160-3159","instagram":"https://www.instagram.com/clinicamonalisyrodrigues","seguidores":"8,5 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-042","nome":"Estética Raphaela Santana","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Edificio Paris - R. Prof. Osvaldo Franco, 90","telefone":"(31) 99861-4199","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-043","nome":"Espaço Jéssica Silva Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. das Palmeiras, 371","telefone":"(31) 99311-7500","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-044","nome":"Redefina clínica","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Ericeira, 870","telefone":"(31) 97342-6096","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-045","nome":"Petali Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Pres. Juscelino Kubitschek, 140","telefone":"(31) 99493-9630","instagram":"https://www.instagram.com/petaliestetica","seguidores":"6,4 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-046","nome":"Clínica Ariane Araújo","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Teotônio Parreira Coelho, 613 - 4°andar","telefone":"(31) 99997-0273","instagram":"https://www.instagram.com/clinicaarianearaujo","seguidores":"5,6 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-047","nome":"Clinica Estética Essencia do Cuidado","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Japurá, 165","telefone":"(31) 99236-0130","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-048","nome":"Micropigmentação e Despigmentação Betim studio Fabiele Souza","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · R. São Judas Tadeu, 85","telefone":"(31) 98574-0773","instagram":"https://www.instagram.com/studiofabielesouza","seguidores":"4,8 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-049","nome":"Mastercrio Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Carino Saraíva Moreira, 10","telefone":"(31) 98698-8515","instagram":"https://www.instagram.com/clinicamastercrio","seguidores":"8,1 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-050","nome":"Dra Daimler Neves | Botox e Harmonização facial em Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Edifício Spazio - R. Santa Cruz, 402 - Sl 603","telefone":"(31) 99625-8882","instagram":"https://www.instagram.com/daimler.neves","seguidores":"10,5 mil","status":"novo","notas":"Motor Local · Maps + IG","kanban":"leads"},{"id":"betim-mg-051","nome":"LIGHT Clínica de Estética Em Betim","cidade":"Betim","estado":"MG","localizacao":"Serviço de depilação a laser ·  · Av. Tapajós, 1180","telefone":"(31) 99063-0081","instagram":"https://www.instagram.com/lightclinicaestetica","seguidores":"2,2 mil","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-052","nome":"Botocenter Betim: Clínica de Estética, MG","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Inconfidência, 642","telefone":"(31) 98393-9890","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-053","nome":"Laser Dream Centro","cidade":"Betim","estado":"MG","localizacao":"Depilação ·  · Alameda Maria Turíbia de Jesus, 100","telefone":"(31) 97203-7330","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-054","nome":"Clínica Chik Dent","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada ·  · Av. Tapajós, 2820 - Lj 3","telefone":"(31) 98315-7719","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-055","nome":"Clínica de Estética Mayara Pires | Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Gov. Valadares, 851","telefone":"(31) 98464-7667","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-056","nome":"Hillary Aquino Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. do Ouro, 135","telefone":"(31) 97571-8629","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-057","nome":"Aura Clinic - Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Santa Cruz, 612","telefone":"(31) 99576-8059","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-058","nome":"Espaço Levitalli","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Santa Cruz, 402 - Sl 1102","telefone":"(31) 98323-3849","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-059","nome":"Espaço A","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · R. Santo Onófre, 123 - Sala 5","telefone":"(31) 2571-2036","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-060","nome":"Adeísa Camargos - Clínica de Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Horizonte Belo, 234","telefone":"(31) 92006-7138","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-061","nome":"Faby Garcia Pimentel studio de beleza","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Av. Raimundo Marçal de Melo, 48","telefone":"(31) 97569-6635","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-062","nome":"Alyra Clinic - Tratamento Capilar e Harmonização facial em Betim","cidade":"Betim","estado":"MG","localizacao":"Serviço de tratamento para a queda de cabelo · Av. Amazonas, 1446 - Lj 03","telefone":"(31) 99432-4314","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-063","nome":"Maysa L’amour Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Alameda Maria Turíbia de Jesus, 69","telefone":"(31) 99157-8909","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-064","nome":"Estética Avançada- Luana Andrade - Cidade Jardim Betim MG","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Olímpia Bueno Franco, 437 - sala 108 2° andar","telefone":"(31) 99652-0496","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-065","nome":"Francyne Ferraz Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Dom Afonso Henrique, 586","telefone":"(31) 98978-3792","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-066","nome":"MORIÁH - Estética Integrativa","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Capela Nova, 305","telefone":"(31) 99288-6158","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-067","nome":"Espaço Artur Assumpção Betim-MG Massagem e Depilação","cidade":"Betim","estado":"MG","localizacao":"Centro de massagem · R. José Teixeira de Oliveira, 295 - A","telefone":"(31) 97103-2809","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-068","nome":"Odonto Mais Saúde e Estética","cidade":"Betim","estado":"MG","localizacao":"Clínica odontológica ·  · Av. Gov. Valadares, 88","telefone":"(31) 99145-6397","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-069","nome":"Studio Paula Nogueira","cidade":"Betim","estado":"MG","localizacao":"Estúdio de pilates ·  · Av. Teotônio Parreira Coelho, 613 - Segundo Andar","telefone":"(31) 99393-9945","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-070","nome":"Solene Beauty Studio - Micropigmentação fio a fio /Maquiagem /Estetica Betim","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Nossa Sra. do Carmo, 314 - Sala 03","telefone":"(31) 98339-0588","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-071","nome":"Clínica de Estética Radiante","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Pedrogão Pequeno, 311","telefone":"(31) 98941-7274","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-072","nome":"Júlia Mata Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Flamboyant, 612","telefone":"(31) 99578-2671","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-073","nome":"Spa - Letícia Souza | Massoterapia e Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de massagem · R. Inconfidência, 402 - segundo andar","telefone":"(31) 97344-3002","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-074","nome":"Deep Depilação & Estética- Unidade Betim","cidade":"Betim","estado":"MG","localizacao":"Depilação ·  · R. Pedro Neves, 54","telefone":"(31) 3532-3260","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-075","nome":"Dany Monteiro Beauty Studio","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · R. Inspetor Jaime Caldeira, 960","telefone":"(31) 99665-9360","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-076","nome":"Studio Viviane Melgaço","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · R. Divinópolis, 22","telefone":"(31) 99497-3361","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-077","nome":"Dom Clínica de Especialidades","cidade":"Betim","estado":"MG","localizacao":"Clínica de Fisioterapia ·  · R. Henrique Machado Horta, 117","telefone":"(31) 3531-1799","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-078","nome":"Socila Betim Centro","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza ·  · Av. Amazonas, 1252","telefone":"(31) 99373-3938","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-079","nome":"Dra Daniela Mendonça - Médica Dermatologista Clínica, Estética e Cirúrgica","cidade":"Betim","estado":"MG","localizacao":"Dermatologista ·  · Av. Presidente Kubitscheck, 544, 3 andar, (31) 3511.4151","telefone":"(31) 3511-4151","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-080","nome":"ERLU - Estética avançada e Cursos.","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada · Av. Coletora, Av. Arthur Trindade, 1530","telefone":"(31) 98851-5855","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-081","nome":"Gleicimara Costa Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Luís Figueiredo Cabral, 173 - Loja 2","telefone":"(31) 99812-1090","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-082","nome":"Clinica de Angiologia Marco Tulio Marques Félix","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada ·  · Edifício Spazio - R. Santa Cruz, 398 - Lj 04","telefone":"(31) 99680-1100","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-083","nome":"Vitare Betim Centro Odontologia e Estética","cidade":"Betim","estado":"MG","localizacao":"Clínica odontológica ·  · Edifício Paris - R. Prof. Osvaldo Franco, 90 - sala 705","telefone":"(31) 98406-1689","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-084","nome":"Clínica beauty Sooli - Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Santa Cruz, 391 - Sala 103","telefone":"(31) 99397-1088","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-085","nome":"Alessa Alves Estética","cidade":"Betim","estado":"MG","localizacao":"Serviço de emagrecimento · Av. Gov. Valadares, 851 - Sl 902","telefone":"(31) 99582-8886","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-086","nome":"Kátia Gianini Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Tóquio, 334","telefone":"(31) 99544-2019","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-087","nome":"Ingrid Michele Clínica de estética","cidade":"Betim","estado":"MG","localizacao":"Spa facial ·  · Av. Miosótis, 133","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-088","nome":"Harmonize Odontologia Saúde Estética - Dra Gisele Moreira","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Campo de Ourique, 1531","telefone":"(31) 3592-2680","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-089","nome":"ClinesculturalBetim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Pres. Juscelino Kubitschek, 417","telefone":"(31) 97531-6611","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-090","nome":"Dr. Laser Betim | Depilação a laser | Estética | Skincare","cidade":"Betim","estado":"MG","localizacao":"Serviço de depilação a laser · Shopping Villa Soleil - Av. Artur da Silva Bernardes, 446 - Lj 08","telefone":"(31) 2571-6688","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-091","nome":"Clínica Renovare - Saúde Integrativa e Estética","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada · R. Olímpia Bueno Franco, 437 - 443 - sala 104","telefone":"(31) 99697-9982","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-092","nome":"Royal Beauty Escola de Beleza e Estetica Betim","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · R. Pedro Neves, 44","telefone":"(31) 98458-9874","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-093","nome":"Dra. Kelly Cena - Clínica de estética em Betim - MG","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Gov. Valadares, 851","telefone":"(31) 99000-7301","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-094","nome":"Centro de Estética Marília Santiago","cidade":"Betim","estado":"MG","localizacao":"Clínica de cirurgia plástica · Avenida Amazonas, 608 - Sls 202 e 203","telefone":"(31) 99104-1568","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-095","nome":"Paula Gomes Estética","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Gilberto Cristiano Dias, 55","telefone":"(31) 99301-2625","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-096","nome":"Studio Adriana Lopes","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · R. Alcídes Inácio da Silva, 305","telefone":"(31) 98591-3133","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-097","nome":"Vip Estética Betim","cidade":"Betim","estado":"MG","localizacao":"Serviço de depilação a laser · Alameda Maria Turíbia de Jesus, 69","telefone":"(31) 99123-7608","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-098","nome":"Studio Sorelle Betim","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Av. Nossa Sra. do Carmo, 70 - Sl 5","telefone":"(31) 98946-8918","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-099","nome":"Ateliê Bley Ualter - Sobrancelhas e Maquiagem Betim","cidade":"Betim","estado":"MG","localizacao":"Salão de sobrancelhas · R. Rio de Janeiro, Número 297 - Sl 305","telefone":"(31) 97538-7522","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-100","nome":"Espaço Beleza Vital","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · R. Paraibuna, 398","telefone":"(31) 97532-3875","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-101","nome":"Inteiramente | Clínica Multidisciplinar | Endocrinologista | Geriatra | Psicologo | Neurologista | Betim MG","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada ·  · Av. Gov. Valadares, 737 - Sala 402","telefone":"(31) 99923-1845","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-102","nome":"Be Glow Beauty Concept - Salão de Beleza em Betim","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · R. Rio Negro, 301","telefone":"(31) 2521-3914","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-103","nome":"Estética Luciana Lucena","cidade":"Betim","estado":"MG","localizacao":"Esteticista ·  · Edifício Boulevard - Av. Pres. Juscelino Kubitschek, 140 - sala 206","telefone":"(31) 99777-9356","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-104","nome":"Gustavo Braz","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Av. Amazonas, 571","telefone":"(31) 98927-1721","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-105","nome":"CM BEAUTY | Sobrancelhas | Cilios | Cursos","cidade":"Betim","estado":"MG","localizacao":"Salão de sobrancelhas ·  · R. Geraldo de Assis Moreira, 16","telefone":"(31) 99452-5574","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-106","nome":"Saúde e Bem-estar Dora","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Marcelo Ribeiro Alves, 63","telefone":"(31) 99942-3601","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-107","nome":"Feels Betim","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Av. Pres. Juscelino Kubitschek, 575","telefone":"(31) 2523-9285","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-108","nome":"Spider Studio Car - Estética Automotiva Betim - PPF","cidade":"Betim","estado":"MG","localizacao":"Serviço de limpeza completa de automóveis ·  · Av. Belo Horizonte, 79","telefone":"(31) 99670-5169","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-109","nome":"Clínica Estética Gabriela Mendes","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Aviz, 69","telefone":"(31) 99958-9280","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-110","nome":"Soberana Espaço de Beleza","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza ·  · R. João Inácio da Silva, 45","telefone":"(31) 3787-1582","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-111","nome":"Regiane Resende: Tratamento de Estrias e Cicatrizes em Betim-MG| Massagem: relaxante, terapêutica, modeladora, ventosaterapia","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Imperatriz, 135","telefone":"(16) 99141-1568","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-112","nome":"Studio Raquel Michele - Unha de Gel Betim- Betim","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza ·  · R. do Rosário, 628","telefone":"(31) 97309-2743","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-113","nome":"Studio Lírio Beleza & Bem estar","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza ·  · be - Av. Belo Horizonte, 1424","telefone":"(31) 3134-2230","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-114","nome":"Paty Silvério Studio","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza ·  · R. Helena Rocha de Carvalho, 133","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-115","nome":"PLANETA PÉ & CIA","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada ·  · R. Prof. Osvaldo Franco, 90 - 6 andar- sala 607","telefone":"(31) 99761-3066","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-116","nome":"ANGELICA FABRICIA ESPACO DE BELEZA","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza ·  · R. Sarzedo, 247","telefone":"(31) 98364-6842","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-117","nome":"Ana Mendes Cílios Betim • Cursos • Salão de beleza","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Av. Amazonas, 608","telefone":"(31) 99172-6856","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-118","nome":"Dra. Núbia Marques","cidade":"Betim","estado":"MG","localizacao":"Clínica especializada · Rua: Santa Cruz, 402 - sala 1201","telefone":"(31) 99153-3337","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-119","nome":"Dra Bianca Marques | Harmonização facial","cidade":"Betim","estado":"MG","localizacao":"Dentista · Av. Amazonas, 5501","telefone":"(31) 99812-2330","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-120","nome":"Faces Naturais Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Gov. Valadares, 851 - Lj 04","telefone":"(31) 3508-5371","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-121","nome":"Mylena Duarte - Harmonização Facial & Mentoria Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro estético · R. Rita Cândida Moreira, 118","telefone":"(31) 99174-7838","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-122","nome":"Delicare Odontologia e Estética Orofacial","cidade":"Betim","estado":"MG","localizacao":"Clínica odontológica · Av. Amazonas, 1446 - Salas 503 e 504","telefone":"(31) 2521-3216","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-123","nome":"Ruci Brayner Esteticista","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Eliéser Fonseca Santos, 73","telefone":"(31) 97157-3580","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-124","nome":"Esteticista & massoterapeuta - Jhuly Almeida","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Inconfidência, 414 - Sl.103","telefone":"(31) 98493-3279","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-125","nome":"Clínica de Estética Keliane Cruz","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Centro de Betim - R. Inconfidência, 402","telefone":"(31) 97150-7337","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-126","nome":"Estética Jéssica Santana","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Arthur Trindade, 470","telefone":"(31) 98664-2642","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-127","nome":"Aissa estética","cidade":"Betim","estado":"MG","localizacao":"Esteticista ·  · R. Rio de Janeiro, 410","telefone":"(31) 92008-5149","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-128","nome":"Jéssica Gontê Estética","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Rio Grande do Sul, 667 B","telefone":"(31) 97156-4131","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-129","nome":"Estética Mariana Moreira Betim","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Rua Vinte e Cinco, 51 Walisson Osana dos Santos 51","telefone":"(31) 98021-1101","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-130","nome":"Clínica Silmara Freitas | Estética Avançada e Depilação a Laser","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Rafael Veneroso, 160","telefone":"(31) 97155-6771","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-131","nome":"Estética Geisiane Mara","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Maria dos Anjos Ribeiro de Jesus, 185","telefone":"(31) 99238-8156","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-132","nome":"Clínica Mariana Brito - Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Juiz Marco Túlio Isaac, 3540","telefone":"(31) 97179-9782","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-133","nome":"Esteticista e Massoterapeuta Betim é Belo Horizonte Estética Paula Werner","cidade":"Betim","estado":"MG","telefone":"(31) 99762-8395","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-134","nome":"Studio Cristina Castro","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Belo Horizonte, 1931 - Sl 6","telefone":"(31) 99148-4605","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-135","nome":"Milena Forneli - Estética","cidade":"Betim","estado":"MG","localizacao":"Studio de cílios · R. Jonas Belizário, 471","telefone":"(31) 97529-7152","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-136","nome":"Priscila Santos Esteta Betim","cidade":"Betim","estado":"MG","localizacao":"Esteticista ·  · Entrada pela - Rua tamarindo, Av. Flamboyant, 8","telefone":"(31) 98569-5462","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-137","nome":"Valéria Lelis Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Inconfidência, 468","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-138","nome":"Thais Oliveira Estética| Design de sobrancelha em Betim| Limpeza de pele em Betim|","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Nicolau Alves de Melo, 13","telefone":"(31) 98621-4597","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-139","nome":"Estética Laila Rodrigues","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Vinte e Cinco","telefone":"(31) 99570-4851","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-140","nome":"Stúdio Haydê Rosa Estética e Sobrancelhas","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Santa Cruz, 402 - Sl 905","telefone":"(31) 99142-2070","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-141","nome":"Estética Endrielly Alves | Betim","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Guiricema, n° 42","telefone":"(31) 98633-2306","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-142","nome":"Thamiris Santos","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Arthur Trindade, 1530","telefone":"(31) 99660-9773","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-143","nome":"Estética Stéfany Melo","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Edmeia Matos Lazzarotti, 3816 - Sl 101","telefone":"(31) 99472-4794","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-144","nome":"Patricia Sena Estética","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Inconfidência, 402 - salas 05 e 101","telefone":"(31) 99374-5616","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-145","nome":"Studio de cilios e sobrancelhas Ptb , Betim -MG-@maizteixeiracilios","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Av. Padre Airton Freire de Lima, 775","telefone":"(31) 99195-0982","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-146","nome":"Viviane Carvalho - Estética Facial e Corporal em Betim","cidade":"Betim","estado":"MG","telefone":"(31) 97161-3058","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-147","nome":"Mariana Arantes Esteticista e Cosmetóloga","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Solimões, 108","telefone":"(31) 97571-8654","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-148","nome":"Ingrid Carvalho Massoterapeuta e Esteticista","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Campo de Ourique, 1680 - Segundo andar","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-149","nome":"Sabrina Rocha Estética","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. São José, 252","telefone":"(31) 99750-2933","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-150","nome":"Sheyla Souza estética e beleza","cidade":"Betim","estado":"MG","localizacao":"Esteticista ·  · R. Sempre-Vivas","telefone":"(31) 98666-8177","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-151","nome":"Estética Identidade Única Betim","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Inconfidência, 118","telefone":"(31) 98549-5200","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-152","nome":"LLD Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Clotildes Borges, 370 - Sl 601","telefone":"(31) 97135-5353","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-153","nome":"Estetica DraValdirene Moreira","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Progresso, 315 B","telefone":"(31) 99413-7353","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-154","nome":"Laricia Nascimento Studio - Extensão de cílios , Estética corporal e Facial","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Av Governador Valadares, 240 centro de","telefone":"(31) 99327-4365","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-155","nome":"Thais Souzza Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Candelária, 42","telefone":"(31) 99905-5158","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-156","nome":"RAQUEL GOULART Sobrancelhas e lábios em Betim","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Bandeirantes, 1045","telefone":"(31) 98437-0090","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-157","nome":"Ivanízia Quadros Estética e Micropigmentação","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Santa Cruz, 402 - 12ª - Andar / Sala 1210","telefone":"(31) 99858-8250","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-158","nome":"Tainara Monique | Estética facial | Estética corporal | Design de sobrancelhas","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Cel. Abílio Rodrigues Pereira, 124","telefone":"(31) 99716-2505","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-159","nome":"Graciela Valim Estética Natural","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Terezinha de Jesus Ribeiro, 35","telefone":"(31) 99972-8849","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-160","nome":"Kahlo - Estética Integrativa","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Rita Cândida Moreira, 223","telefone":"(31) 99519-6304","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-161","nome":"Ana Domingos Estética - Betim","cidade":"Betim","estado":"MG","localizacao":"Esteticista ·  · R. José Pio da Silva Cardoso, 1100","telefone":"(31) 97262-9835","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-162","nome":"Espaço Fina Estética","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Av. Rio Madeira, 525","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-163","nome":"Carla Melo Estética Avançada - BOTOX, APLICAÇÃO DE VASINHOS, LIMPEZA DE PELE, DRENAGEM, IMPLANTON EM BETIM","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. José Inácio Filho, 1001","telefone":"(31) 99816-4134","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-164","nome":"Cílios e Sobrancelhas Betim | Camila Malaquias","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Vinte e Dois, 301","telefone":"(31) 99244-8517","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-165","nome":"Espaço Formas e fios estetica fácial e corporal avançada.","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Belo Horizonte, 345","telefone":"(31) 99739-8053","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-166","nome":"Estética Avançada Betim MG - Dra. Nicoly Nathaly","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Tapajós, 27","telefone":"(31) 99217-4813","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-167","nome":"Gabriella Ferreira Estética & Arte","cidade":"Betim","estado":"MG","localizacao":"Serviço de depilação a cera ·  · R. Igarapava, 180a","telefone":"(31) 97334-6454","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-168","nome":"Estética Mirelly Entreportes","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Alzira Rocha Saliba, 18","telefone":"(31) 99448-9863","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-169","nome":"Reluzente Estética e Saúde Rua Fernando de Noronha, 216, Senhora das Graças Betim MG","cidade":"Betim","estado":"MG","localizacao":"Reluzente Estética e Saúde Rua Fernando de Noronha, 216, Senhora das Graças Betim MG","telefone":"(31) 98613-2463","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-170","nome":"Gleice Gonçalves Esteticista| Depilação a Laser| Limpeza de Pele Profunda/Depilação a Cera","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · R. Progresso","telefone":"(31) 98116-2525","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-171","nome":"Dra Fernanda Amormino Estética e Bem-estar","cidade":"Betim","estado":"MG","telefone":"(31) 99833-5085","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-172","nome":"luiza Caminhas Estética Avançada","cidade":"Betim","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Amazonas, 1446 - Sl 708","telefone":"(31) 98611-0279","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-173","nome":"ELE E ELA CLÍNICA DE ESTÉTICA","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Manoel da Silva Pereira, 64","telefone":"(31) 98871-1116","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-174","nome":"Clínica Remove Betim - Remoção de Tatuagem, Sobrancelhas e Depilação a Laser","cidade":"Betim","estado":"MG","localizacao":"Serviço de depilação a laser · R. Antônio Dias, 85","telefone":"(31) 97331-0041","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-175","nome":"Oásis Estética Izabella Santos","cidade":"Betim","estado":"MG","localizacao":"Serviço de depilação a laser · Av. Rio Madeira, 377","telefone":"(31) 99599-5867","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-176","nome":"Ana Melo - Estética Integrativa","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Rua Joaquim Luiz de Carvalho, 38","telefone":"(31) 97502-3350","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-177","nome":"Cílios e sobrancelhas PTB/Betim - Studio Luana Rodrigues","cidade":"Betim","estado":"MG","localizacao":"Salão de Beleza · Rua José martiniano de Souza, 409","telefone":"(31) 99345-4856","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-178","nome":"GR Estética","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Urucuia, 53","telefone":"(31) 97559-6108","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-179","nome":"Gabryela Lopes Estética","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Nova York","telefone":"(31) 98344-8218","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-180","nome":"Estética - Nayara Nágila","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Antônio Carlos, 81","telefone":"(31) 99253-6582","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-181","nome":"Olívia Andrade Clinica Podologia e Estetica","cidade":"Betim","estado":"MG","localizacao":"Olívia Andrade Clinica Podologia e Estetica","telefone":"(31) 98789-1772","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-182","nome":"Cm estetica betim","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Prof. Osvaldo Franco","telefone":"(31) 99380-0593","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-183","nome":"Traço Perfeito Micropigmentação e Estética","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. Pacífico Belém, 69","telefone":"(31) 99776-0407","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-184","nome":"Lyvia Athaydes Estética e Beleza","cidade":"Betim","estado":"MG","localizacao":"Esteticista · R. João Pinheiro, 22 - Sl 207","telefone":"(31) 99122-1141","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"},{"id":"betim-mg-185","nome":"Ludmila Rodrigues Estética","cidade":"Betim","estado":"MG","localizacao":"Esteticista · Av. Chicó Mendes, 27","telefone":"(31) 99820-4356","status":"novo","notas":"Motor Local · Maps · IG pendente (Google bloqueou — faça login e rode de novo)","kanban":"leads"}];
+async function seedBetim(){
+  if(localStorage.getItem('seed_betim_v1'))return;
+  const existing=new Set(LEADS.map(l=>l.id));
+  for(const s of SEED_BETIM){
+    if(existing.has(s.id))continue;
+    await putLead(Object.assign({email:'',site:'',socios:'',notas:'',instagram:'',seguidores:'',status:'novo',dataAbordagem:'',kanban:'leads',createdAt:Date.now(),updatedAt:Date.now()},s));
+  }
+  const k=normCity('Betim');const c=CAPTACOES.find(x=>x.key===k);
+  if(c){c.total=SEED_BETIM.length;c.status='andamento';c.iniciada=false;c.updatedAt=Date.now();await putCap(c);}
+  else{await putCap({key:k,cidade:'Betim',estado:'MG',total:SEED_BETIM.length,status:'andamento',ordem:2,updatedAt:Date.now()});}
+  localStorage.setItem('seed_betim_v1','1');
+}
+
+/* ---------- Seed: novos leads de Juiz de Fora (Motor) ---------- */
+const SEED_JFNOVOS=/*__JFNOVOS__*/[{"id":"juiz de fora-mg-005","nome":"Clínica Estética Inovadora Praise - Estética Corporal - Juiz de Fora","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Centro Auditivo Fonoflex - Rua: Santa Rita, 487","telefone":"(32) 99839-5685","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-007","nome":"Ludmila Marques Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Josefina Tristão, 121","instagram":"https://www.instagram.com/ludmilamarques.estetica","seguidores":"1,9 mil","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-011","nome":"Estética Mauri - Certificada em Criolipólise","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de cirurgia plástica ·  · Av. Barão do Rio Branco, 2370","telefone":"(32) 99165-7533","instagram":"https://www.instagram.com/esteticamauri","seguidores":"1,2 mil","socios":"Maurizélia Ferreira","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-015","nome":"Clínica de Estética Bela Vitta","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Condominio do Edifício Century XXI - Centro, Av. Barão do Rio Branco, 2001 - Sl 1406","telefone":"(32) 99126-9125","instagram":"https://www.instagram.com/belavittajf","seguidores":"13,4 mil","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-018","nome":"Micropigmentação Estética e Capilar Alcione Marocolo - Juiz de Fora/MG","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Barão do Rio Branco, 2053 - Sl 1306","telefone":"(32) 99184-0021","instagram":"https://www.instagram.com/clinicaalcionemarocolo","seguidores":"3,7 mil","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-023","nome":"Clínica Núcleo Odontologia Estética | Juiz de Fora - MG","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · Av. Rui Barbosa, 1154","telefone":"(32) 99135-7425","instagram":"https://www.instagram.com/nucleoodontologiaestetica","seguidores":"3,5 mil","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-024","nome":"Clínica Elevare - Saúde, Performance e Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Luz Interior, 330 - Lj 206","telefone":"(32) 99810-4219","instagram":"https://www.instagram.com/elevare_saude","seguidores":"1,5 mil","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-026","nome":"Centro de Estética Ética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de cirurgia plástica · R. Halfeld, 513","telefone":"(32) 3217-3723","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-027","nome":"Drenagem Linfática JF","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Barão do Rio Branco, 1863 - SALA906","telefone":"(32) 99197-0040","instagram":"https://www.instagram.com/armandaennesesteticajf","seguidores":"330","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-029","nome":"Persona Centro de Medicina Estética e Laser","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de cirurgia plástica ·  · Shopping Alameda - R. Morais e Castro, 300 - 218","telefone":"(32) 98857-1886","instagram":"https://www.instagram.com/personajf","seguidores":"4 mil","socios":"Édina e Fátima (irmãs)","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-032","nome":"Núcleo de Estética Studio A","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · Av. Independência, 603","telefone":"(32) 3231-4945","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-036","nome":"Vitalitá Estética e Bem Estar","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Batista de Oliveira, 693 - Sl 202","telefone":"(32) 98487-5696","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-037","nome":"Clínica Juvenesse - Biomedicina e Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de dermatologia · Edifício Baependy - R. Halfeld, 805/1002","telefone":"(32) 98819-1620","instagram":"https://www.instagram.com/juvenesseoficial","seguidores":"469","socios":"Priscila Jaenicke","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-038","nome":"Studio Ribeiro estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · Av. Getúlio Vargas, 353","telefone":"(32) 99156-5903","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-040","nome":"Rayane Assis Esteticista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Batista de Oliveira, 639/201","telefone":"(32) 99993-1979","instagram":"https://www.instagram.com/rayaneassisestetica","seguidores":"7 mil","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-041","nome":"Ana Paula Machado - Saúde & Bem Estar","cidade":"Juiz de Fora","estado":"MG","localizacao":"Terapeuta · R. da Abolição, 105","telefone":"(32) 98856-5812","instagram":"não encontrado","seguidores":"não encontrado","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-042","nome":"Dolce Vita Estética & Bem Estar","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de dermatologia ·  · R. São Mateus, 1175","telefone":"(32) 99180-8089","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-045","nome":"Livart Clínica Saúde e Bem-Estar","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de Fisioterapia ·  · R. Espírito Santo, 742","telefone":"(32) 93501-3840","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-046","nome":"Viver Mais JF","cidade":"Juiz de Fora","estado":"MG","localizacao":"Residência geriátrica ·  · R. da Abolição, 84","telefone":"(32) 3241-4660","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-047","nome":"CamilaPiercer.lashjf","cidade":"Juiz de Fora","estado":"MG","localizacao":"Serviço de colocação de piercing · R. Barbosa Lima, 145","telefone":"(32) 99125-6131","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-048","nome":"Vitalitá - Clínica de Estética e Bem-Estar","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Batista de Oliveira, 693 - 202","telefone":"(32) 98487-5696","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-050","nome":"Capillus Centro de Beleza","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · R. Braz Bernardino, 158","telefone":"(32) 3218-9574","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-051","nome":"Socila Juiz de Fora Unidade Centro","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · R. Barão de São João Nepomuceno, 319","telefone":"(32) 3216-9632","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-053","nome":"Seroclin Ltda","cidade":"Juiz de Fora","estado":"MG","localizacao":"Oncologista ·  · M Sarmento - R. Eng. José Carlos de Morais Sarmento, 407","telefone":"(32) 3241-5952","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-054","nome":"Priscila Machado Estética Facial e Corporal","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Lair Monteiro de Castro, 22","telefone":"(32) 98460-2927","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-055","nome":"Dra. Daira Saraiva - Odontologia e Estética - Juiz de Fora","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · R. Braz Bernardino, 199/113","telefone":"(32) 99106-4544","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-057","nome":"Clínica de Estética Rosa de Saron","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de cirurgia plástica ·  · R. Halfeld, 525","telefone":"(32) 3212-1452","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-058","nome":"Mega Studio","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · R. Espírito Santo, 904","telefone":"(32) 3213-6475","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-060","nome":"Caroline Pogianela Esteticista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Barbosa Lima, 250","telefone":"(32) 99172-7663","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-061","nome":"Michele Loiola Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Barbosa Lima, 279 Centro","telefone":"(32) 99138-0699","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-062","nome":"TOP DOG Centro de Bem-Estar Canino","cidade":"Juiz de Fora","estado":"MG","localizacao":"Hotel para animais de estimação ·  · R. Dr. João Pinheiro, 350","telefone":"(32) 99109-5231","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-064","nome":"Rayssa Rodrigues Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Batista de Oliveira, 1164 - Sl 807 Sala 2","telefone":"(32) 98806-7761","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-065","nome":"Estét. Facial Corporal Avanç Jovialles","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista ·  · Edifício Lili - R. Santa Rita, 164/ 203","telefone":"(32) 99981-9264","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-066","nome":"Hospital Universitário UFJF - Unidade HU Santa Catarina","cidade":"Juiz de Fora","estado":"MG","localizacao":"Hospital ·  · R. Catulo Breviglieri, Bairro - s/n","telefone":"(32) 4009-5131","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-067","nome":"Clínica Dr. Saúde","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · Tv. Dr. Prisco, 11","telefone":"(32) 98821-7177","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-071","nome":"Harmonização Facial & Dentista Juiz de Fora - Irma Loque","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · R. São Mateus, 230a","telefone":"(32) 98858-5941","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-072","nome":"Mariáh Studio Beauty","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · R. Barbosa Lima, 322 - Apto 101","telefone":"(32) 99959-2082","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-073","nome":"Espaco de Beleza Vila Corina | by Kátia Dutra","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · R. Antônio Dias Tostes, 741","telefone":"(32) 98821-9031","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-074","nome":"Ariane Reis- espaço de cuidado","cidade":"Juiz de Fora","estado":"MG","localizacao":"Manicure · R. Antônio Dias Tostes, 330","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-075","nome":"Espaco Capilar Studio C","cidade":"Juiz de Fora","estado":"MG","localizacao":"Cabeleireiro · Av. Getúlio Vargas, 353 - Lj 140","telefone":"(32) 98820-2693","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-077","nome":"Lar Joana de Angelis","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de repouso ·  · R. Padre Frederico, 66","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-078","nome":"Pneumologia","cidade":"Juiz de Fora","estado":"MG","localizacao":"Hospital ·  · R. Catulo Breviglieri, Bairro - s/n","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-079","nome":"Harmonize Centro de Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · Av. Barão do Rio Branco, 2595","telefone":"(32) 99146-8043","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-090","nome":"Dra. Vivian Werneck - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista ·  · R. Espírito Santo, 1115 - Salas 1206-1211","telefone":"(32) 99106-5555","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-091","nome":"Odontologia Especializada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · R. Cristovam Molinari, 136","telefone":"(32) 99953-2222","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-094","nome":"Harmonização Facial e Corporal - Núcleo Harmonizar","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Severiano Sarmento, 302","telefone":"(32) 99822-3430","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-095","nome":"Dra Lídia Vargas - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Oscar Vidal, 247 - Sl 1902","telefone":"(32) 99884-0504","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-096","nome":"Drª. Ana Flávia Freesz / Núcleo Harmonizar","cidade":"Juiz de Fora","estado":"MG","localizacao":"Drª. Ana Flávia Freesz / Núcleo Harmonizar","telefone":"(32) 99822-3430","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-097","nome":"Instituto Face a Face - Dra. Pamella Parussoli - Harmonização Facial - Cirurgiã Dentista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · Ed. Alber Ganimi - R. Espírito Santo, 1115 - Sl 2008","telefone":"(31) 97340-0428","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-099","nome":"Harmonização Facial e Odontologia Estética-Doutora Ingrid Lanna","cidade":"Juiz de Fora","estado":"MG","localizacao":"Cirurgião dentista · R. Pedro Botti, 76","telefone":"(32) 98414-7473","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-101","nome":"Instituto Thais Fernandes - Centro Odontológico","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · R. Oscar Vidal, 307 - Sl 1002","telefone":"(32) 3212-7783","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-103","nome":"Clínica Elos","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Paula Lima, 209","telefone":"(32) 4141-0220","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-104","nome":"Dra Hevellyne Consultório Odontológico e Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica especializada ·  · R. Oscar Vidal, 252 - 2 an","telefone":"(32) 98428-3647","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-106","nome":"DOCTOR FILL","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Morais e Castro, 216","telefone":"(32) 99108-1596","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-107","nome":"Realce - Harmonização e Odontologia Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Barão do Rio Branco, 2721 - 210","telefone":"(32) 99144-5941","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-108","nome":"Clínica Renovar Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Santo Antônio, 33","telefone":"(32) 99840-2254","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-109","nome":"Clínica Mariane Souza | Harmonização e Alinhadores","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista ·  · R. Fernando Lôbo, 102 - Sl 702","telefone":"(32) 99827-5467","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-110","nome":"Dra. Rachel Volpi- Odontologia e Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · Av. Barão do Rio Branco, 2679 - Sl 814","telefone":"(32) 98447-5562","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-111","nome":"Instituto de Saúde e Estética Integrativa Dr.Clézio","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Barão do Rio Branco, 2053 - Sl 605","telefone":"(32) 99133-6659","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-112","nome":"Dra. Geisiane Oliveira Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Presidente Itamar Franco, 1418","telefone":"(32) 99955-9960","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-113","nome":"Botoclinic Mister Shopping","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Mr. Moore, 70","telefone":"(32) 3235-0020","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-114","nome":"Mayer Clinic","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica especializada · R. Mr. Moore, 70 - Piso 2 — SALA 205","telefone":"(32) 98800-0020","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-115","nome":"RR DERMATOFUNCIONAL E DEPILAÇÃO A LASER","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Dr. João Pinheiro, 829A","telefone":"(32) 99966-8748","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-116","nome":"Lábios Odontologia e Harmonização","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de implante dentário ·  · R. Tomás Gonzaga, 320","telefone":"(32) 99837-4544","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-117","nome":"HERA Clinic","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Delfim Moreira, 207","telefone":"(32) 3026-9088","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-118","nome":"Dra. Gilda Peron - Mestre em Lasers na Odontologia","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista ·  · R. Espírito Santo, 1115 - Salas 1808 e 1809","telefone":"(32) 3215-0220","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-119","nome":"Limpeza de Pele - Taynara Avéllar","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Esquina com a - Rua Marechal Deodoro, Av. Barão do Rio Branco, 566 - Sl 704","telefone":"(32) 99989-8348","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-120","nome":"Lumina - Odontologia especializada em você","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista · Av. Barão do Rio Branco, 2555 - Sl 203","telefone":"(32) 98711-7410","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-121","nome":"Dra. Aline Zaiter - Harmonização Facial, Ortodontia e Odontopediatria","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · Ena Soares - Plenitude psicologia - Av. Barão do Rio Branco, 1871 - Sl 2101","telefone":"(32) 98418-6556","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-122","nome":"ÉLORA Letícia Rodrigues - Haute Esthetique","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica especializada ·  · R. Francisco Vaz de Magalhães, 222","telefone":"(32) 99116-6482","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-123","nome":"Flávia Queiroz Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Flávia Queiroz Estética","telefone":"(32) 98845-8095","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-124","nome":"Taiana Borges Estética e Beleza","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Marechal Deodoro, 541 - Sl 303","telefone":"(32) 99148-9630","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-125","nome":"Dra. Júlia Monaco Musse - Dermatologista e Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dermatologista ·  · R. Halfeld, 525 - Sl 401","telefone":"(32) 99987-8339","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-126","nome":"Tratamento ATM, BRUXISMO Dra. Lúbia Cerqueira Costa","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · R. Halfeld, 763 - sala 47, 3 andar","telefone":"(32) 99972-8272","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-127","nome":"Biomédico Esteta Dr. Raphael Siqueira","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Ed. Baependi - R. Halfeld, 805 - Sl 803","telefone":"(32) 99148-9488","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-128","nome":"Dra. Karina Sinhoroto - Dentista e Estética Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista · Av. Getúlio Vargas, 571/201","telefone":"(32) 3215-2553","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-129","nome":"Dra. Deborah Souza - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","telefone":"(32) 98842-0470","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-130","nome":"Érika Mendes - Harmonização Facial e Corporal","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro estético ·  · Av. Barão do Rio Branco, 2817 - salas 1601/1602","telefone":"(32) 98814-8173","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-131","nome":"Espaço Reeluz","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Halfeld, 525 - 12 andar \\ sala 1202","telefone":"(32) 98465-3942","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-132","nome":"Dra. Jussara Braga | Harmonização Facial em Juiz de Fora","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Presidente Itamar Franco, 1418 - 7º andar","telefone":"(32) 99106-4001","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-133","nome":"Dr. Caio Bellini Lovisi - Cirurgia Ortognática e Implantes","cidade":"Juiz de Fora","estado":"MG","localizacao":"Cirurgião oral e maxilofacial ·  · Av. Barão do Rio Branco, 2555 - Sl 908","telefone":"(32) 3213-3173","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-134","nome":"Cris Porto Clínica Naturopatia e Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Naturopata · Av. Barão do Rio Branco, 2588 - Sl 1003","telefone":"(32) 99806-5121","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-135","nome":"Estética Sandra Santana Estética Integrativa","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Marechal Deodoro, 541 - Sl 309","telefone":"(32) 98707-4632","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-136","nome":"Dra. Camila Araújo","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista · Av. Barão do Rio Branco, 1871","telefone":"(32) 99906-2255","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-137","nome":"Daniela Garonete - DG Studio Beauty & Tattoos","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Barão do Rio Branco, 2817 - Sl 1204","telefone":"(32) 99194-5998","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-138","nome":"SR Odontologia Especializada - Dra. Thainara Salgueiro","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · R. Halfeld, 805 / 803","telefone":"(32) 4141-9061","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-139","nome":"Marcela Senna - Nissí Odontologia","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · Av. Barão do Rio Branco, 2370 - Sl 1323","telefone":"(32) 99821-0060","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-140","nome":"Espaço Kamila Fernandes","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Solar do Progresso - Av. Barão do Rio Branco, 2288","telefone":"(32) 99195-0950","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-141","nome":"LUCIANA SPERANDIO BIOMEDICINA ESTÉTICA","cidade":"Juiz de Fora","estado":"MG","telefone":"(32) 99136-7227","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-142","nome":"Dar Maria Tereza harmonização facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · Edifício Dona Liu - Av. Barão do Rio Branco, 2588 - Sl 305","telefone":"(32) 3211-7474","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-143","nome":"be - Banni Estevão Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Batista de Oliveira, 1164 - Sl 512","telefone":"(32) 99868-6688","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-144","nome":"Kamila Xavier Odontologia Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista ·  · R. Oscar Vidal, 274 - Sl 901","telefone":"(32) 99148-0223","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-145","nome":"ODONTOLOGIA NEEO","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · Av. Barão do Rio Branco, 2370 - Sl 201","telefone":"(32) 3029-8701","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-146","nome":"Clínica Rezende Cruz - Odontologia Humanizada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · Av. Barão do Rio Branco, 2390 - Sala: 502","telefone":"(32) 3026-2033","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-148","nome":"Laura Neves Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Fisioterapeuta ·  · Lê Quartier - R. Batista de Oliveira, 1164/814","telefone":"(32) 98802-6905","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-149","nome":"Face a Face - Clínica Especializada em Harmonização Orofacial - Dra Pamella Corrêa Parussoli","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · R. Espírito Santo, 2008","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-150","nome":"Dra. Marina S Miranda - Harmonização Corporal e Facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Barão do Rio Branco, 2288","telefone":"(32) 99966-1758","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-152","nome":"Dra. Jessica Theodoro - Cirurgiã-Dentista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · R. Halfeld, 704 - sala 213","telefone":"(32) 99130-5338","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-153","nome":"Naiara Mábia Estetica Especializada JF","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Edifício Central Park - R. Marechal Deodoro, 541 - Sl 504","telefone":"(32) 99111-4743","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-154","nome":"Rita Reis Odontologia Estética.","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista · Av. Barão do Rio Branco, 2679 - Sl 506","telefone":"(32) 99932-1101","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-155","nome":"Clínica Odontológica em Juiz de Fora - Instituto Fartes","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista ·  · Av. Barão do Rio Branco, 2406 - Sl 306","telefone":"(32) 98868-7363","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-156","nome":"Dra. Lucilane Tostes - Harmonização facial","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Av. Barão do Rio Branco, 2985 - Sl 601","telefone":"(32) 3216-7904","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-157","nome":"Dra Jozeani Mayer","cidade":"Juiz de Fora","estado":"MG","localizacao":"Cirurgião dentista · R. Marechal Deodoro, 552 - 6 Andar","telefone":"(32) 98800-0020","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-158","nome":"Dra. Alana Campos - Harmonização Facial","cidade":"Juiz de Fora","estado":"MG","telefone":"(32) 99927-1791","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-159","nome":"Clínica de Estetica Emiliane Paiva","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Marechal Deodoro, 541 - Sl 504","telefone":"(32) 98402-2416","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-160","nome":"Dra Paula Liparini","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista · Rua Halfeld 756 - galeria Pio X, Sl 284","telefone":"(24) 98815-4945","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-161","nome":"Vidon Odontologia | Dra Helen Vidon & Equipe","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica · Av. Barão do Rio Branco, 2370 - Sl 927","telefone":"(32) 3211-9061","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-162","nome":"Revitalizar estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Galeria Ana Delmonte - R. Barão de São João Nepomuceno, 225 - Lj 113","telefone":"(32) 99134-1120","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-163","nome":"Clínica Lana | Dermatologista, Estética e Ginecologista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica de dermatologia ·  · R. Oscar Vidal, 320","telefone":"(32) 3215-7555","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-164","nome":"Glow Studio Estética e Micropigmentação","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Av. Barão do Rio Branco, 2555/1304","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-165","nome":"Vitallity Sthetic Laser - Depilação a Laser","cidade":"Juiz de Fora","estado":"MG","localizacao":"Serviço de depilação a laser · Av. Barão do Rio Branco, 2370 - Sl 809","telefone":"(32) 99143-8666","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-166","nome":"Dra. Érika Cintra","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Rua Espírito Santo, 1115, 15º Andar, Consultório 1513, Edifício Alber Ganimi","telefone":"(32) 99146-6066","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-168","nome":"Endodontista - Dra. Eriana Santos - Juiz de Fora","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista · Rua Halfeld, 763 Sala 43 - 3° andar","telefone":"(32) 99859-5919","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-169","nome":"Evidenza Centro de Estética e Laser","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Barão do Rio Branco, 2370 - Sl 722","telefone":"(32) 99196-2222","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-170","nome":"Sumaya Máttar Dermatologista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dermatologista ·  · Av. Barão do Rio Branco, 2721 - Sl 1103","telefone":"(32) 98458-5614","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-172","nome":"Drenagem linfática Aline Manuelle","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Centro comercial solar Palace - R. Halfeld, 513 - 3 andar Sala 301","telefone":"(32) 99139-9150","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-173","nome":"Cerdeira Odontologia","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista · Av. Barão do Rio Branco, 2337 - Sl 708","telefone":"(32) 3215-7238","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-174","nome":"Studio Gaia Estética & Beleza","cidade":"Juiz de Fora","estado":"MG","telefone":"(32) 3015-2025","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-175","nome":"Priscilla Alencar | Estética e Depilação a Laser","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Mr. Moore, 70","telefone":"(32) 98829-0271","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-176","nome":"Sevarolli Odontologia | Dentista em Juiz de Fora | Implante, Prótese e Lentes de Porcelana","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dentista ·  · Av. Barão do Rio Branco, 2406 - sala 1104","telefone":"(32) 3029-2710","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-177","nome":"Petit Trianon Massoterapia e Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de bem-estar · R. Halfeld, 525 - Sl 1201","telefone":"(32) 99130-8476","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-178","nome":"Corpo S/A (Centro)","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Avenida Independência, 925","telefone":"(32) 98888-9343","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-179","nome":"Carolina Medeiros / Depilação a Laser e Limpeza de Pele","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Edifício Top Center - Av. Barão do Rio Branco, 1863 - sala 611","telefone":"(32) 99125-8203","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-180","nome":"Estética Ludmilla Maier","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Av. Barão do Rio Branco, 2370 - Sl 513","telefone":"(32) 99164-7858","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-181","nome":"Tatiane Freitas Esteticista","cidade":"Juiz de Fora","estado":"MG","telefone":"(32) 98887-4226","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-182","nome":"Clinica Novum - Tricologia e estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Serviço de tratamento para a queda de cabelo ·  · Av. Olegário Maciel, 248","telefone":"(32) 99175-3363","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-183","nome":"Rhema Centro de Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza ·  · R. Taváres Bastos, 134","telefone":"(32) 3212-4097","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-184","nome":"Esteticista Holística Dayane Lacerda","cidade":"Juiz de Fora","estado":"MG","localizacao":"Spa de saúde · Marechal Center, R. Marechal Deodoro, 444 - 339 - 3° andar","telefone":"(32) 98883-5023","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-185","nome":"Espaço Sabino Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · Espaço Sabino Estética - R. Halfeld, 524/301","telefone":"(32) 3017-9431","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-186","nome":"Esteticista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Massoterapeuta · R. Visc. de Mauá, 85","telefone":"(32) 99922-5198","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-187","nome":"Mari Oliveira | Esteticista e Cosmetóloga","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Halfeld, 513 - Sl 305","telefone":"(32) 98458-2992","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-190","nome":"Laleska Delgado | Beleza e Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · Braz Shopping - R. Braz Bernardino, 105 - Sl 235","telefone":"(32) 99986-5859","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-191","nome":"Jupira Carvalho Estética JF : Limpeza de pele | Drenagem Linfática | Depilação a laser | Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Fernando Lôbo, 102","telefone":"(32) 99973-8099","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-192","nome":"Estetica e Saúde Nutribella","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. dos Andradas, 340 - Lj 103","telefone":"(32) 99847-2974","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-193","nome":"Esteticista Karina Nunes","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Halfeld, 828 - Sl 415","telefone":"(32) 99843-0437","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-194","nome":"RR Rilza Rocha Estética e Saúde","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Santa Rita, 325/ 303","telefone":"(32) 99162-1182","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-195","nome":"Letícia Santiago Esteticista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Terapeuta de drenagem linfática · Av. Barão do Rio Branco, 2288","telefone":"(32) 99817-1583","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-196","nome":"Juliana Vicente Esteticista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Av. Barão do Rio Branco, 2370 - Sl 511","telefone":"(32) 98817-3844","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-197","nome":"MAJOS - Massagens Terapêuticas e Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Marechal Deodoro, 455 - Sl 202","telefone":"(32) 99136-9091","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-198","nome":"Renata Cores Estética","cidade":"Juiz de Fora","estado":"MG","telefone":"(32) 98884-9889","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-199","nome":"Ingri Ciara rejuvenescimento Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Marechal Deodoro, 162 - Lj 5","telefone":"(32) 98833-0304","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-200","nome":"Flávia Monteiro - Estética Avançada - Juiz de Fora","cidade":"Juiz de Fora","estado":"MG","localizacao":"Flávia Monteiro - Estética Avançada - Juiz de Fora","telefone":"(32) 98423-3445","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-201","nome":"Dra. Marcela Junqueira - Dermatologista em Juiz de Fora- Tricologia e Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dermatologista ·  · Av. Barão do Rio Branco, 2337 - Sl 904","telefone":"(32) 98817-5885","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-202","nome":"Love Laser Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Av. Barão do Rio Branco, 2555 - Sl 205","telefone":"(32) 99156-9001","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-203","nome":"Lahys Varoto | Micropigmentação e Botox","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · Av. Getúlio Vargas, 353 - LJ 134","telefone":"(32) 98808-1043","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-207","nome":"Bellamour Centro de Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Serviço de depilação a cera · R. Barão de São João Nepomuceno, 343","telefone":"(32) 98892-6249","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-208","nome":"Monique Lopes - Estética e Micropigmentação","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · Av. Barão do Rio Branco, 2288, 36016-310 - sala 1309","telefone":"(32) 98896-1915","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-209","nome":"Vitali Clínica Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Mr. Moore, 170 - 507","telefone":"(32) 98853-7762","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-210","nome":"Clínica Lothus - Estética e Psicologia","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Av. Barão do Rio Branco, 2270 - Sl 202","telefone":"(32) 99916-4988","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-211","nome":"Cleo Centro de Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de Beleza · R. Américo Lôbo, 1206","telefone":"(32) 3216-5712","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-212","nome":"Livre Fotodepilação e Estética","cidade":"Juiz de Fora","estado":"MG","telefone":"(32) 98898-5867","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-213","nome":"Loyana Gurgel Esteticista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Marechal Deodoro, 541 - Sl 505","telefone":"(32) 99124-0476","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-214","nome":"LS - Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro estético · R. Batista de Oliveira, 1164 - 508","telefone":"(32) 98814-8454","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-215","nome":"Estética HarmoniKA","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Av. Barão do Rio Branco, n° 2337 - Sl 1011","telefone":"(32) 99990-0547","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-216","nome":"ESTÉTICA AVANÇADA ALICE MAGRI","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Dom Viçoso, 155","telefone":"(32) 98805-2223","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-217","nome":"Centro de Estética Tamires Olliver","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · Gal. PioX 3º andar, R. Marechal Deodoro, sala 304","telefone":"(32) 98848-3565","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-218","nome":"Dermacenter - Dermatologia e Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Dermatologista ·  · R. Prof. Benjamin Colucci, Coluci, 130, 3º E 5º andar","telefone":"(32) 3215-8087","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-219","nome":"Cecron Centro de Estética e Cirurgia Odontológica","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica odontológica ·  · Av. Barão do Rio Branco, 2721 - Sl 1608","telefone":"(32) 98491-7368","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-220","nome":"Luiza Oliveira Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Centro Empresarial Mohamed - Av. Barão do Rio Branco, 2053 - Sala: 1005","telefone":"(32) 98874-5962","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-221","nome":"Studio Rafhaela Grossi - Esteticista","cidade":"Juiz de Fora","estado":"MG","localizacao":"Spa de saúde · R. Fonseca Hermes","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-222","nome":"Clínica de Estética Eliana Mazzoni","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica especializada · Av. Brasil, 2712 - Sala 101 - 1 andar","telefone":"(32) 98853-3418","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-223","nome":"Jéssica Franck micropigmentação e estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Halfeld, 414 - sala 1004","telefone":"(32) 99136-7932","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-224","nome":"Henrique Franco - Estética e Saúde | Juiz de Fora","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · Av. Barão do Rio Branco, 2370 - Sl 1222","telefone":"(32) 99173-5767","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-225","nome":"Dra. Mariana Quites | Odontologia estética ( facetas em resina)","cidade":"Juiz de Fora","estado":"MG","localizacao":"Cirurgião dentista · R. Braz Bernardino, 105 - Centro, Juiz de Fora - MG, 36010-320 - Piso 2 / sala 238","telefone":"(32) 98453-0404","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-226","nome":"Estética Carolina Reis","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza ·  · R. Ataliba de Barros, 182 - Sl 807","telefone":"(32) 98867-9838","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-227","nome":"Clínica De Estética VERA DAVI","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro comercial · R. Mr. Moore","telefone":"(32) 3231-1005","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-228","nome":"Dedicare Clínica Médica & Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Médico ·  · R. Halfeld, 807","telefone":"(32) 3026-5788","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-229","nome":"Incorpore Biomedicina e Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · rua Marechal Deodoro, 77. Galeria Pio X. Sala 247, 2º andar","telefone":"(32) 3031-6645","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-230","nome":"Mary Mattos Estética","cidade":"Juiz de Fora","estado":"MG","localizacao":"Salão de sobrancelhas · Rua Halfed 763 , galeria João Beraldo Edifício Juíz de Fora , 2, andar, sala 36","telefone":"(32) 98849-9403","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-231","nome":"Pelo Zero Depilação - Estética - Juiz de Fora MG","cidade":"Juiz de Fora","estado":"MG","localizacao":"Depilação · R. Chanceler Oswaldo Aranha, 235","telefone":"(32) 3218-2709","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-233","nome":"Roze Vallotti","cidade":"Juiz de Fora","estado":"MG","localizacao":"Esteticista · R. Marechal Deodoro, 444 - Marechal Center - Loja 322 - 3º Piso","telefone":"(32) 98821-6646","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-234","nome":"Estética e Massoterapia Novo Estilo","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro de saúde e beleza · R. Mr. Moore, 19","telefone":"(32) 98707-4909","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-235","nome":"Espaço K7 Biomedicina Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Centro estético · Av. Barão do Rio Branco, 2406 - Sl 1109","telefone":"(32) 99113-1232","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"},{"id":"juiz de fora-mg-236","nome":"REVIVARE Estética Avançada","cidade":"Juiz de Fora","estado":"MG","localizacao":"Clínica especializada · Av. Barão do Rio Branco, 2337 - Sl 705","telefone":"(31) 98459-6449","status":"novo","kanban":"leads","notas":"Motor Local · Maps (a enriquecer IG)"}];
+async function seedJfNovos(){
+  if(localStorage.getItem('seed_jfnovos_v1'))return;
+  const existing=new Set(LEADS.map(l=>l.id));
+  for(const s of SEED_JFNOVOS){
+    if(existing.has(s.id))continue;
+    await putLead(Object.assign({email:'',site:'',socios:'',notas:'',instagram:'',seguidores:'',status:'novo',dataAbordagem:'',kanban:'leads',createdAt:Date.now(),updatedAt:Date.now()},s));
+  }
+  const k=normCity('Juiz de Fora');const c=CAPTACOES.find(x=>x.key===k);
+  if(c){c.total=(c.total||43)+SEED_JFNOVOS.length;c.status='andamento';c.iniciada=false;c.updatedAt=Date.now();await putCap(c);}
+  localStorage.setItem('seed_jfnovos_v1','1');
+}
+
+/* ---------- Boot ---------- */
+(async function(){
+  await openDB();
+  LEADS=await loadAll();
+  CAPTACOES=await loadAllCap();
+  await seedJF();
+  CAPTACOES=await loadAllCap();
+  await seedCities();
+  CAPTACOES=await loadAllCap();
+  await seedRegions();
+  LEADS=await loadAll();
+  CAPTACOES=await loadAllCap();
+  await seedBetim();
+  CAPTACOES=await loadAllCap();
+  await seedJfNovos();
+  LEADS=await loadAll();
+  CAPTACOES=await loadAllCap();
+  await syncCaptacoes();
+  buildStatusChips();
+  renderDashboard();
+  $('#f_dataAbordagem').value='';
+  checkMotor();
+  setInterval(checkMotor,15000);
+})();
+</script>
+</body>
+</html>

@@ -1052,6 +1052,10 @@ async function seedJfNovos(){
 const SYNC_URL='https://atlas-dashboard-2q3.pages.dev/api/estetica';
 const SYNC_KEY='2b2202ce5ec3f19b1844dc741ba89738b291';
 let SYNC_ON=false, syncing=false, syncTimer=null;
+function fetchT(url,opts,ms){ // fetch com timeout — nunca pendura
+  const ac=new AbortController(); const t=setTimeout(()=>ac.abort(), ms||6000);
+  return fetch(url,Object.assign({signal:ac.signal},opts||{})).finally(()=>clearTimeout(t));
+}
 function setSyncBadge(txt,cls){
   let b=document.getElementById('syncBadge');
   if(!b){ b=document.createElement('div'); b.id='syncBadge';

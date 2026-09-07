@@ -1066,7 +1066,7 @@ function setSyncBadge(txt,cls){
 }
 async function syncPull(){
   try{
-    const resp=await fetch(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{cache:'no-store'});
+    const resp=await fetchT(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{cache:'no-store'},6000);
     if(!resp.ok){ SYNC_ON=false; setSyncBadge('nuvem indisponível (local)','err'); return false; }
     const data=await resp.json();
     SYNC_ON=true;

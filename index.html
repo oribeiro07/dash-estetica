@@ -1085,6 +1085,7 @@ async function fillFromSeeds(){
   CAPTACOES=await loadAllCap();
   await seedJfNovos();
   LEADS=await loadAll();
+  await fillFromSeeds();
   CAPTACOES=await loadAllCap();
   await syncCaptacoes();
   buildStatusChips();

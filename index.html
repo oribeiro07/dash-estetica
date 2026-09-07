@@ -1134,7 +1134,6 @@ async function fillFromSeeds(){
   await seedJfNovos();
   LEADS=await loadAll();
   await fillFromSeeds();
-  await syncPull();
   CAPTACOES=await loadAllCap();
   await syncCaptacoes();
   buildStatusChips();
@@ -1142,6 +1141,14 @@ async function fillFromSeeds(){
   $('#f_dataAbordagem').value='';
   checkMotor();
   setInterval(checkMotor,15000);
+  // sincronização em segundo plano — NUNCA trava a interface
+  syncPull().then(async()=>{
+    CAPTACOES=await loadAllCap();
+    buildStatusChips(); renderDashboard();
+    const active=document.querySelector('#nav button.active');
+    const av=active?active.getAttribute('data-view'):'';
+    if(av==='leads')renderLeads(); else if(av==='kanban')renderKanban();
+  }).catch(()=>{});
 })();
 </script>
 </body>

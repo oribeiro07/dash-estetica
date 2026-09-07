@@ -518,15 +518,15 @@ function renderLeads(){
   }).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
 
   const tb=$('#leadsTable').querySelector('tbody');
-  tb.innerHTML=rows.length?rows.map(l=>`<tr>
+  tb.innerHTML=rows.length?rows.map(l=>`<tr style="cursor:pointer" onclick="openLead('${l.id}')">
     <td class="wrap"><b>${esc(l.nome)}</b></td>
     <td class="wrap">${esc([l.cidade,l.estado].filter(Boolean).join(' / '))||'<span class="muted">—</span>'}<div class="muted" style="font-size:11px">${esc(l.localizacao||'')}</div></td>
     <td class="wrap">${esc(l.socios)||'<span class="muted">—</span>'}</td>
     <td>${esc(l.email)||'<span class="muted">—</span>'}</td>
-    <td>${l.instagram?`<a class="iglink" href="${esc(l.instagram)}" target="_blank">${esc(igHandle(l.instagram))}</a>`:'<span class="muted">—</span>'}</td>
+    <td>${l.instagram?`<a class="iglink" href="${esc(l.instagram)}" target="_blank" onclick="event.stopPropagation()">${esc(igHandle(l.instagram))}</a>`:'<span class="muted">—</span>'}</td>
     <td>${l.seguidores?esc(l.seguidores):'<span class="muted">—</span>'}</td>
     <td><span class="pill st-${l.status}">${stLabel(l.status)}</span></td>
-    <td><button class="actbtn" onclick="openLead('${l.id}')">Abrir</button></td>
+    <td><button class="actbtn" onclick="event.stopPropagation();openLead('${l.id}')">Abrir</button></td>
   </tr>`).join(''):`<tr><td colspan="8" class="empty">Nenhum lead encontrado.</td></tr>`;
 }
 

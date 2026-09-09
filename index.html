@@ -1119,7 +1119,7 @@ async function fillFromSeeds(){
   try{
     if(localStorage.getItem('data_fill_v')===DATA_FILL_V)return;
     const src=new Map();
-    for(const arr of [typeof SEED_JF!=='undefined'?SEED_JF:null, typeof SEED_JFNOVOS!=='undefined'?SEED_JFNOVOS:null, typeof SEED_BETIM!=='undefined'?SEED_BETIM:null]){
+    for(const arr of [typeof SEED_JF!=='undefined'?SEED_JF:null, typeof SEED_JFNOVOS!=='undefined'?SEED_JFNOVOS:null, typeof SEED_BETIM!=='undefined'?SEED_BETIM:null, typeof SEED_UBERLANDIA!=='undefined'?SEED_UBERLANDIA:null]){
       if(!arr)continue; for(const s of arr) src.set(s.id,s);
     }
     const campos=['instagram','seguidores','socios','telefone','localizacao','email','site'];

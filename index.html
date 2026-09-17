@@ -1103,6 +1103,17 @@ async function fillFromSeeds(){
   }catch(e){console.warn('fillFromSeeds falhou (ok, segue):',e);}
 }
 
+/* ---------- Remove do painel qualquer lead SEM Instagram (não prospectável) ---------- */
+async function pruneNoIG(){
+  try{
+    const toDel=LEADS.filter(l=>!(l.instagram&&String(l.instagram).includes('instagram.com')));
+    if(!toDel.length)return 0;
+    for(const l of toDel){ await delLead(l.id); }
+    LEADS=await loadAll();
+    scheduleSync&&scheduleSync();
+    return toDel.length;
+  }catch(e){ console.warn('pruneNoIG falhou (ok, segue):',e); return 0; }
+}
 /* ---------- Boot ---------- */
 (async function(){
   await openDB();

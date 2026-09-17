@@ -1133,6 +1133,7 @@ async function pruneNoIG(){
   await seedRio();
   LEADS=await loadAll();
   await fillFromSeeds();
+  await pruneNoIG();
   CAPTACOES=await loadAllCap();
   await syncCaptacoes();
   buildStatusChips();

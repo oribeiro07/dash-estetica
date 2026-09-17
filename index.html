@@ -1143,6 +1143,7 @@ async function pruneNoIG(){
   setInterval(checkMotor,15000);
   // sincronização em segundo plano — NUNCA trava a interface
   syncPull().then(async()=>{
+    await pruneNoIG();
     CAPTACOES=await loadAllCap();
     buildStatusChips(); renderDashboard();
     const active=document.querySelector('#nav button.active');

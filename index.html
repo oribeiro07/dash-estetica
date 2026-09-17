@@ -1005,6 +1005,19 @@ async function seedUber(){
   else{await putCap({key:k,cidade:'Uberlândia',estado:'MG',total:SEED_UBERLANDIA.length,status:'andamento',ordem:3,updatedAt:Date.now()});}
   localStorage.setItem('seed_uber_v1','1');
 }
+const SEED_RIO=/*__RIO__*/[];
+async function seedRio(){
+  if(localStorage.getItem('seed_rio_v1'))return;
+  const existing=new Set(LEADS.map(l=>l.id));
+  for(const s of SEED_RIO){
+    if(existing.has(s.id))continue;
+    await putLead(Object.assign({email:'',site:'',socios:'',notas:'',instagram:'',seguidores:'',status:'novo',dataAbordagem:'',kanban:'leads',createdAt:Date.now(),updatedAt:Date.now()},s));
+  }
+  const k=normCity('Rio de Janeiro');const c=CAPTACOES.find(x=>x.key===k);
+  if(c){c.total=SEED_RIO.length;c.status='andamento';c.iniciada=false;c.updatedAt=Date.now();await putCap(c);}
+  else{await putCap({key:k,cidade:'Rio de Janeiro',estado:'RJ',total:SEED_RIO.length,status:'andamento',ordem:4,updatedAt:Date.now()});}
+  localStorage.setItem('seed_rio_v1','1');
+}
 async function seedJfNovos(){
   if(localStorage.getItem('seed_jfnovos_v1'))return;
   const existing=new Set(LEADS.map(l=>l.id));

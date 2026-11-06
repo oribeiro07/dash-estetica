@@ -1151,11 +1151,15 @@ async function syncPull(){
       LEADS=await loadAll();
       syncing=false;
     }
-    // disparos vindos da nuvem: só usa se este computador não tiver os dados locais (ex.: abrindo de outro aparelho)
-    if(data && data.disparos && !window.DISPAROS){
-      window.DISPAROS=data.disparos;
-      const a=document.querySelector('#nav button.active');
-      if(a && a.dataset.view==='prospeccao') renderProspeccao();
+    // disparos da nuvem: usa como fonte em tempo real, mas só se for mais recente que o arquivo estático já carregado
+    if(data && data.disparos){
+      const atual=window.DISPAROS && window.DISPAROS.gerado;
+      const nova=data.disparos.gerado;
+      if(!atual || (nova && nova>atual)){
+        window.DISPAROS=data.disparos;
+        const a=document.querySelector('#nav button.active');
+        if(a && a.dataset.view==='prospeccao') renderProspeccao();
+      }
     }
     setSyncBadge('sincronizado ✓','ok');
     scheduleSync(); // devolve o estado mesclado (ou o embutido inicial) pra nuvem

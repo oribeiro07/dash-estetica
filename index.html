@@ -173,6 +173,7 @@
     </div>
     <nav class="nav" id="nav">
       <button data-view="dashboard" class="active"><span class="ic">📊</span> Dashboard</button>
+      <button data-view="prospeccao"><span class="ic">📨</span> Prospecção</button>
       <button data-view="leads"><span class="ic">📋</span> Leads</button>
       <button data-view="kanban"><span class="ic">🗂️</span> Kanban</button>
       <button data-view="coleta"><span class="ic">🎯</span> Captação</button>
@@ -220,6 +221,40 @@
           <table id="recentTable"><thead><tr>
             <th>Nome</th><th>Localização</th><th>Instagram</th><th>Status</th><th>Atualizado</th>
           </tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROSPECÇÃO (disparos automáticos de WhatsApp) -->
+    <section id="view-prospeccao" style="display:none">
+      <div class="desc" id="pr_atualizado" style="margin:-4px 0 14px"></div>
+      <div class="grid-kpi" id="pr_kpis"></div>
+      <div class="row" style="align-items:stretch">
+        <div class="panel" style="flex:1;min-width:320px">
+          <h2>Cadência de disparos</h2>
+          <div class="desc">1º contato → follow-up 1 → follow-up 2 → responderam</div>
+          <div class="funnel" id="pr_funnel"></div>
+        </div>
+        <div class="panel" style="flex:1;min-width:320px">
+          <h2>Contatos por dia</h2>
+          <div class="desc">Mensagens enviadas por dia · meta diária <b id="pr_meta">—</b></div>
+          <div class="weekchart" id="pr_week"></div>
+        </div>
+      </div>
+      <div class="row" style="align-items:stretch">
+        <div class="panel" style="flex:1;min-width:300px">
+          <h2>Por estado</h2>
+          <div class="desc">Na ordem de prospecção definida</div>
+          <div class="tablewrap">
+            <table id="pr_estados" style="min-width:0"><thead><tr><th>UF</th><th>Contatos</th><th>Respostas</th><th>Na base</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+        <div class="panel" style="flex:1.5;min-width:320px">
+          <h2>Últimos contatos</h2>
+          <div class="desc">Atividade mais recente da automação</div>
+          <div class="tablewrap">
+            <table id="pr_ultimos" style="min-width:0"><thead><tr><th>Quando</th><th>Clínica</th><th>Local</th><th>Etapa</th><th>Resultado</th></tr></thead><tbody></tbody></table>
+          </div>
         </div>
       </div>
     </section>
@@ -380,6 +415,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="disparos-dashboard.js" onerror="window.DISPAROS=null"></script>
 <script>
 /* ---------- IndexedDB ---------- */
 const DB_NAME='prospeccao_estetica', STORE='leads', CAPS='captacoes';
@@ -417,16 +453,68 @@ function fmtDate(iso){if(!iso)return '—';const d=new Date(iso);return d.toLoca
 function igHandle(url){if(!url)return '';const m=String(url).match(/instagram\.com\/([^\/\?]+)/i);return m?'@'+m[1]:url;}
 
 /* ---------- Navigation ---------- */
-const TITLES={dashboard:['Dashboard','Visão geral da prospecção'],leads:['Leads','Todos os leads coletados'],kanban:['Kanban','Guia de prospecção diária'],coleta:['Captação','Central de captação por cidade'],dados:['Backup / Dados','Exportar e importar']};
+const TITLES={dashboard:['Dashboard','Visão geral da prospecção'],prospeccao:['Prospecção WhatsApp','Disparos automáticos · contatos diários'],leads:['Leads','Todos os leads coletados'],kanban:['Kanban','Guia de prospecção diária'],coleta:['Captação','Central de captação por cidade'],dados:['Backup / Dados','Exportar e importar']};
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
   const v=b.dataset.view;
-  ['dashboard','leads','kanban','coleta','dados'].forEach(x=>$('#view-'+x).style.display=x===v?'block':'none');
+  ['dashboard','prospeccao','leads','kanban','coleta','dados'].forEach(x=>$('#view-'+x).style.display=x===v?'block':'none');
   $('#pageTitle').textContent=TITLES[v][0];$('#pageSub').textContent=TITLES[v][1];
   document.getElementById('side').classList.remove('open');
-  if(v==='dashboard')renderDashboard();if(v==='leads')renderLeads();if(v==='kanban')renderKanban();if(v==='coleta'){renderCaptacao();checkMotor();}
+  if(v==='dashboard')renderDashboard();if(v==='prospeccao')renderProspeccao();if(v==='leads')renderLeads();if(v==='kanban')renderKanban();if(v==='coleta'){renderCaptacao();checkMotor();}
 });
+
+/* ---------- Prospecção (disparos automáticos de WhatsApp) ---------- */
+function renderProspeccao(){
+  const D=window.DISPAROS;
+  if(!D){
+    $('#pr_atualizado').innerHTML='';
+    $('#pr_kpis').innerHTML='<div class="kpi" style="grid-column:1/-1"><div class="lbl">Sem dados ainda</div><div class="val" style="font-size:17px;margin-top:10px;font-weight:700">Nenhum disparo registrado neste computador</div><div class="hint" style="font-size:13px">Rode a automação pelo atalho <b>INICIAR Prospeccao</b> na área de trabalho. O painel passa a atualizar sozinho a cada envio — depois é só recarregar esta página (F5).</div></div>';
+    $('#pr_funnel').innerHTML='';$('#pr_week').innerHTML='';
+    $('#pr_estados').querySelector('tbody').innerHTML='';$('#pr_ultimos').querySelector('tbody').innerHTML='';
+    return;
+  }
+  const T=D.totais, g=new Date(D.gerado);
+  $('#pr_atualizado').innerHTML='Atualizado em <b>'+g.toLocaleDateString('pt-BR')+' '+g.toTimeString().slice(0,5)+'</b> · base de '+D.base.toLocaleString('pt-BR')+' leads com WhatsApp';
+  $('#pr_meta').textContent=D.metaDia;
+
+  const diaHoje=(D.porDia.find(d=>d.data===todayStr())||{total:0}).total;
+  const kpis=[
+    {lbl:'Contatos hoje',val:diaHoje,hint:'meta '+D.metaDia+'/dia',ic:'📨'},
+    {lbl:'Leads alcançados',val:T.alcancados,hint:'1º contato feito',ic:'🎯'},
+    {lbl:'Responderam',val:T.respostas,hint:T.taxaResposta+'% de resposta',ic:'💬'},
+    {lbl:'Progresso da base',val:T.progresso+'%',hint:T.alcancados+' de '+D.base.toLocaleString('pt-BR'),ic:'📈'},
+    {lbl:'Mensagens enviadas',val:T.mensagens,hint:T.follows+' follow-ups',ic:'✉️'},
+  ];
+  $('#pr_kpis').innerHTML=kpis.map(k=>`<div class="kpi"><div class="spark">${k.ic}</div><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="hint">${k.hint}</div></div>`).join('');
+
+  const F=D.funil, stages=[
+    {label:'1º contato',n:F.alcancados,color:'var(--blue)'},
+    {label:'Follow-up 1',n:F.follow1,color:'#a99bff'},
+    {label:'Follow-up 2',n:F.follow2,color:'var(--amber)'},
+    {label:'Responderam',n:F.respostas,color:'var(--green)'},
+  ];
+  const fmax=Math.max(stages[0].n,1);
+  $('#pr_funnel').innerHTML=stages.map((s,i)=>{
+    const w=Math.max(s.n/fmax*100,2);
+    const rate=i===0?'':(stages[0].n?Math.round(s.n/stages[0].n*100)+'%':'');
+    return `<div class="fstage"><div class="name">${s.label}</div><div class="bar"><div class="fill" style="width:${w}%;background:linear-gradient(90deg,${s.color},${s.color}bb)"></div>${rate?`<div class="rate">${rate}</div>`:''}</div><div class="num">${s.n}</div></div>`;
+  }).join('');
+
+  const dias=D.porDia.slice(-14);
+  const wmax=Math.max(...dias.map(d=>d.total),D.metaDia,1);
+  $('#pr_week').innerHTML=dias.length?dias.map(d=>{
+    const h=d.total/wmax*100, dt=parseLocal(d.data);
+    const lbl=dt?(dt.getDate()+'/'+(dt.getMonth()+1)):d.data;
+    return `<div class="col"><div class="cbar" style="height:${Math.max(h,3)}%" title="${d.primeiros} de 1º contato · ${d.follows} follow-up · ${d.respostas} resposta(s)"><span>${d.total}</span></div><div class="clbl">${lbl}</div></div>`;
+  }).join(''):'<div class="muted" style="margin:auto">Sem envios ainda</div>';
+
+  $('#pr_estados').querySelector('tbody').innerHTML=D.porEstado.length?D.porEstado.map(e=>`<tr><td><b>${esc(e.uf)}</b></td><td>${e.contatos}</td><td>${e.respostas}</td><td class="muted">${(D.porUFbase[e.uf]||0).toLocaleString('pt-BR')}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Sem contatos ainda</td></tr>';
+
+  const etapaLbl=e=>e===0?'1º contato':('Follow '+e);
+  const pill=r=>{const m={enviado:['#0b3b2e','#36d39b','Enviado'],respondeu:['#0e3450','#58b6ff','Respondeu'],invalido:['#3a2330','#ff7a9c','Inválido'],falha:['#3a2a12','#ffb347','Falha'],conversa_existente:['#2a2340','#a99bff','Já em conversa']}[r]||['#1a2437','#9fb0c9',r];return `<span style="background:${m[0]};color:${m[1]};padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap">${m[2]}</span>`;};
+  $('#pr_ultimos').querySelector('tbody').innerHTML=D.ultimos.length?D.ultimos.map(u=>`<tr><td class="muted">${esc(u.data.slice(5).split('-').reverse().join('/'))} ${esc(u.hora)}</td><td class="wrap"><b>${esc(u.empresa)}</b></td><td>${esc([u.cidade,u.uf].filter(Boolean).join(' / '))}</td><td>${etapaLbl(u.etapa)}</td><td>${pill(u.res)}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">Sem registros ainda</td></tr>';
+}
 
 /* ---------- Dashboard ---------- */
 function startOfWeek(d){const x=new Date(d);const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);x.setHours(0,0,0,0);return x;}
@@ -1063,6 +1151,12 @@ async function syncPull(){
       LEADS=await loadAll();
       syncing=false;
     }
+    // disparos vindos da nuvem: só usa se este computador não tiver os dados locais (ex.: abrindo de outro aparelho)
+    if(data && data.disparos && !window.DISPAROS){
+      window.DISPAROS=data.disparos;
+      const a=document.querySelector('#nav button.active');
+      if(a && a.dataset.view==='prospeccao') renderProspeccao();
+    }
     setSyncBadge('sincronizado ✓','ok');
     scheduleSync(); // devolve o estado mesclado (ou o embutido inicial) pra nuvem
     return true;
@@ -1077,7 +1171,12 @@ function scheduleSync(){
 async function syncPush(){
   if(!SYNC_ON) return;
   try{
-    const r=await fetchT(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({leads:LEADS,updatedAt:Date.now()})},8000);
+    // lê o blob atual e troca só os leads — preserva o campo "disparos" que a automação grava
+    let cur={};
+    try{ cur=await (await fetchT(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{cache:'no-store'},6000)).json(); }catch(e){ cur={}; }
+    if(!cur||typeof cur!=='object') cur={};
+    cur.leads=LEADS; cur.updatedAt=Date.now();
+    const r=await fetchT(SYNC_URL+'?k='+encodeURIComponent(SYNC_KEY),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(cur)},8000);
     setSyncBadge(r.ok?'salvo na nuvem ✓':'erro ao salvar', r.ok?'ok':'err');
   }catch(e){ setSyncBadge('sem conexão','err'); }
 }

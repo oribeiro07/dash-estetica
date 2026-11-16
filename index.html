@@ -71,6 +71,19 @@
     .fstage{grid-template-columns:82px 1fr 38px}
     th:nth-child(3),td:nth-child(3){display:none}
   }
+  /* abas + CRM */
+  .tabs{display:flex;gap:8px;margin:14px 0 18px}
+  .tabs button{background:#0e1726;color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+  .tabs button.on{background:linear-gradient(135deg,var(--brand),#6a5bff);color:#fff;border-color:transparent}
+  .crmcard{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+  .crmcard .nome{font-weight:700;font-size:14px;margin-bottom:2px}
+  .crmcard .meta{color:var(--muted);font-size:11.5px;margin-bottom:10px}
+  .crmrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .crmrow select,.crmrow input{background:#0e1726;border:1px solid var(--border);color:var(--txt);border-radius:8px;padding:7px 9px;font-size:12.5px;font-family:inherit;color-scheme:dark}
+  .crmrow .ok{font-size:12px;color:var(--green);font-weight:700;margin-left:auto}
+  .crmfiltro{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+  .crmfiltro button{background:#0e1726;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .crmfiltro button.on{background:linear-gradient(135deg,var(--brand),#6a5bff);color:#fff;border-color:transparent}
 </style>
 </head>
 <body>
@@ -78,6 +91,12 @@
   <div class="head"><div class="dot">✦</div><div><h1>Prospecção <span style="color:var(--brand2)">WhatsApp</span></h1><small>Disparos automáticos · Atlas Assessoria</small></div></div>
   <div class="upd" id="upd"></div>
 
+  <div class="tabs" id="tabs">
+    <button data-tab="painel" class="on">📊 Painel</button>
+    <button data-tab="crm">🗂️ CRM</button>
+  </div>
+
+  <div id="view-painel">
   <div class="rangebar">
     <span class="lbl">Período</span>
     <div class="chips" id="chips">
@@ -94,6 +113,13 @@
   <div class="periodo" id="periodo"></div>
 
   <div id="conteudo"></div>
+  </div><!-- /view-painel -->
+
+  <div id="view-crm" style="display:none">
+    <div class="desc" id="crmInfo" style="margin-bottom:12px"></div>
+    <div class="crmfiltro" id="crmFiltro"></div>
+    <div id="crmLista"></div>
+  </div>
 </div>
 
 <script src="disparos-dashboard.js" onerror="window.DISPAROS=null"></script>
@@ -225,8 +251,72 @@ function init(){
   const [de,ate]=presetRange('tudo'); aplicar(de,ate);
 }
 init();
-// recarrega de tempos em tempos para pegar a importação do fim do dia
-setInterval(()=>location.reload(), 10*60*1000);
+
+// ---------- CRM ----------
+const CLOUD='https://atlas-dashboard-2q3.pages.dev/api/estetica?k=2b2202ce5ec3f19b1844dc741ba89738b291';
+const CRM_STATUS=[['','— sem marcação'],['interessado','Interessado'],['reuniao','Reunião'],['nao_agora','Não agora'],['tem_equipe','Já tem equipe'],['sem_interesse','Sem interesse']];
+const RETORNO_PADRAO='2027-01-06';
+let CRM={}, crmFiltro='';
+
+async function crmLer(){ try{ const b=await (await fetch(CLOUD,{cache:'no-store'})).json(); return (b&&b.crm)||{}; }catch(e){ return {}; } }
+async function crmSalvar(id, patch){
+  let b={}; try{ b=await (await fetch(CLOUD,{cache:'no-store'})).json(); }catch(e){}
+  if(!b||typeof b!=='object') b={};
+  b.crm=b.crm||{};
+  b.crm[id]=Object.assign({}, b.crm[id], patch, {quando:Date.now()});
+  CRM[id]=b.crm[id];
+  const r=await fetch(CLOUD,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(b)});
+  if(!r.ok) throw new Error('falha ao salvar');
+}
+function respondidos(){
+  const D=window.DISPAROS; if(!D||!D.eventos) return [];
+  const m=new Map();
+  for(const e of D.eventos){ if(e.res==='respondeu'){ const p=m.get(e.id); if(!p || (e.data+e.hora)>(p.data+p.hora)) m.set(e.id,e); } }
+  return [...m.values()].sort((a,b)=>(b.data+b.hora).localeCompare(a.data+a.hora));
+}
+function renderCRM(){
+  const leads=respondidos();
+  $('#crmInfo').innerHTML='<b>'+leads.length+'</b> clínicas responderam. A automação lê estas marcações: <b>Sem interesse</b> para de contatar; <b>Não agora / Já tem equipe</b> volta no retorno (Janeiro).';
+  const fs=[['','Todos'],...CRM_STATUS.filter(s=>s[0])];
+  $('#crmFiltro').innerHTML=fs.map(f=>`<button data-f="${f[0]}" class="${crmFiltro===f[0]?'on':''}">${f[1]}</button>`).join('');
+  $('#crmFiltro').querySelectorAll('button').forEach(b=>b.onclick=()=>{crmFiltro=b.dataset.f;renderCRM();});
+  const vis=leads.filter(l=>{ const st=(CRM[l.id]||{}).status||''; return crmFiltro===''||st===crmFiltro; });
+  $('#crmLista').innerHTML = vis.length ? vis.map(l=>{
+    const c=CRM[l.id]||{}, st=c.status||'', showRet=(st==='nao_agora'||st==='tem_equipe');
+    return `<div class="crmcard" data-id="${l.id}">
+      <div class="nome">${esc(l.empresa)}</div>
+      <div class="meta">${esc([l.cidade,l.uf].filter(Boolean).join(' / '))} · respondeu ${brData(l.data)} ${esc(l.hora)}</div>
+      <div class="crmrow">
+        <select class="st">${CRM_STATUS.map(s=>`<option value="${s[0]}" ${s[0]===st?'selected':''}>${s[1]}</option>`).join('')}</select>
+        <input class="ret" type="date" value="${c.retorno||RETORNO_PADRAO}" style="${showRet?'':'display:none'}">
+        <input class="nota" placeholder="nota (opcional)" value="${esc(c.nota||'')}" style="flex:1;min-width:110px">
+        <span class="ok" style="display:none">salvo ✓</span>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty">Nenhum lead neste filtro.</div>';
+  $('#crmLista').querySelectorAll('.crmcard').forEach(card=>{
+    const id=card.dataset.id, sel=card.querySelector('.st'), ret=card.querySelector('.ret'), nota=card.querySelector('.nota'), ok=card.querySelector('.ok');
+    const salvar=async()=>{
+      const status=sel.value, showRet=(status==='nao_agora'||status==='tem_equipe');
+      ret.style.display=showRet?'':'none'; ok.style.display='none'; ok.textContent='salvando…'; ok.style.display='';
+      try{ await crmSalvar(id,{status, retorno: showRet?ret.value:'', nota:nota.value}); ok.textContent='salvo ✓'; setTimeout(()=>ok.style.display='none',1500); }
+      catch(e){ ok.textContent='erro'; }
+    };
+    sel.onchange=salvar; ret.onchange=salvar; nota.onchange=salvar;
+  });
+}
+// abas Painel / CRM
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=async()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  const t=b.dataset.tab;
+  $('#view-painel').style.display=t==='painel'?'':'none';
+  $('#view-crm').style.display=t==='crm'?'':'none';
+  if(t==='crm'){ $('#crmLista').innerHTML='<div class="empty">Carregando…</div>'; CRM=await crmLer(); renderCRM(); }
+});
+
+// recarrega de tempos em tempos para pegar a importação do fim do dia (só no Painel, pra não atrapalhar a marcação no CRM)
+setInterval(()=>{ const on=document.querySelector('#tabs button.on'); if(on && on.dataset.tab==='painel') location.reload(); }, 10*60*1000);
 </script>
 </body>
 </html>
